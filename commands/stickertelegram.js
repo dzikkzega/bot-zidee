@@ -3,7 +3,8 @@ const { writeExifImg } = require('../lib/exif');
 const delay = time => new Promise(res => setTimeout(res, time));
 const fs = require('fs');
 const path = require('path');
-const sharp = require('sharp');
+// sharp dihapus - tidak kompatibel dengan Android/Termux
+// Gunakan FFmpeg untuk konversi gambar
 const webp = require('node-webpmux');
 const crypto = require('crypto');
 const { exec } = require('child_process');
