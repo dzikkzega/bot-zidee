@@ -9,11 +9,11 @@ async function pairCommand(sock, chatId, message, q) {
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363161513685998@newsletter',
-                        newsletterName: 'KnightBot MD',
-                        serverMessageId: -1
-                    }
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: '120363287485628066@newsletter',
+                            newsletterName: 'ZideeBot MD',
+                            serverMessageId: -1
+                        }
                 }
             });
         }
@@ -28,11 +28,11 @@ async function pairCommand(sock, chatId, message, q) {
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363161513685998@newsletter',
-                        newsletterName: 'KnightBot MD',
-                        serverMessageId: -1
-                    }
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: '120363287485628066@newsletter',
+                            newsletterName: 'ZideeBot MD',
+                            serverMessageId: -1
+                        }
                 }
             });
         }
@@ -47,11 +47,11 @@ async function pairCommand(sock, chatId, message, q) {
                     contextInfo: {
                         forwardingScore: 1,
                         isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: '120363161513685998@newsletter',
-                            newsletterName: 'KnightBot MD',
-                            serverMessageId: -1
-                        }
+                            forwardedNewsletterMessageInfo: {
+                                newsletterJid: '120363287485628066@newsletter',
+                                newsletterName: 'ZideeBot MD',
+                                serverMessageId: -1
+                            }
                     }
                 });
             }
@@ -61,11 +61,11 @@ async function pairCommand(sock, chatId, message, q) {
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363161513685998@newsletter',
-                        newsletterName: 'KnightBot MD',
-                        serverMessageId: -1
-                    }
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: '120363287485628066@newsletter',
+                            newsletterName: 'ZideeBot MD',
+                            serverMessageId: -1
+                        }
                 }
             });
 
@@ -84,11 +84,11 @@ async function pairCommand(sock, chatId, message, q) {
                         contextInfo: {
                             forwardingScore: 1,
                             isForwarded: true,
-                            forwardedNewsletterMessageInfo: {
-                                newsletterJid: '120363161513685998@newsletter',
-                                newsletterName: 'KnightBot MD',
-                                serverMessageId: -1
-                            }
+                                forwardedNewsletterMessageInfo: {
+                                    newsletterJid: '120363287485628066@newsletter',
+                                    newsletterName: 'ZideeBot MD',
+                                    serverMessageId: -1
+                                }
                         }
                     });
                 } else {
@@ -105,11 +105,11 @@ async function pairCommand(sock, chatId, message, q) {
                     contextInfo: {
                         forwardingScore: 1,
                         isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: '120363161513685998@newsletter',
-                            newsletterName: 'KnightBot MD',
-                            serverMessageId: -1
-                        }
+                            forwardedNewsletterMessageInfo: {
+                                newsletterJid: '120363287485628066@newsletter',
+                                newsletterName: 'ZideeBot MD',
+                                serverMessageId: -1
+                            }
                     }
                 });
             }
@@ -121,9 +121,9 @@ async function pairCommand(sock, chatId, message, q) {
             contextInfo: {
                 forwardingScore: 1,
                 isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363161513685998@newsletter',
-                    newsletterName: 'KnightBot MD',
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363287485628066@newsletter',
+                    newsletterName: 'ZideeBot MD',
                     serverMessageId: -1
                 }
             }

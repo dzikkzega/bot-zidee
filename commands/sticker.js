@@ -5,6 +5,12 @@ const path = require('path');
 const settings = require('../settings');
 const webp = require('node-webpmux');
 const crypto = require('crypto');
+let sharp;
+try {
+    sharp = require('sharp');
+} catch {
+    console.log('Sharp not available, will use FFmpeg only');
+}
 
 async function stickerCommand(sock, chatId, message) {
     // The message that will be quoted in the reply.
@@ -36,14 +42,24 @@ async function stickerCommand(sock, chatId, message) {
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363161513685998@newsletter',
-                    newsletterName: 'KnightBot MD',
+                    newsletterJid: '120363287485628066@newsletter',
+                    newsletterName: 'ZideeBot MD',
                     serverMessageId: -1
                 }
             }
         },{ quoted: messageToQuote });
         return;
     }
+
+    // Create temp directory if it doesn't exist
+    const tmpDir = path.join(process.cwd(), 'tmp');
+    if (!fs.existsSync(tmpDir)) {
+        fs.mkdirSync(tmpDir, { recursive: true });
+    }
+
+    // Generate temp file paths
+    const tempInput = path.join(tmpDir, `temp_${Date.now()}`);
+    const tempOutput = path.join(tmpDir, `sticker_${Date.now()}.webp`);
 
     try {
         const mediaBuffer = await downloadMediaMessage(targetMessage, 'buffer', {}, { 
@@ -58,8 +74,8 @@ async function stickerCommand(sock, chatId, message) {
                     forwardingScore: 999,
                     isForwarded: true,
                     forwardedNewsletterMessageInfo: {
-                        newsletterJid: '120363161513685998@newsletter',
-                        newsletterName: 'KnightBot MD',
+                        newsletterJid: '120363287485628066@newsletter',
+                        newsletterName: 'ZideeBot MD',
                         serverMessageId: -1
                     }
                 }
@@ -67,42 +83,64 @@ async function stickerCommand(sock, chatId, message) {
             return;
         }
 
-        // Create temp directory if it doesn't exist
-        const tmpDir = path.join(process.cwd(), 'tmp');
-        if (!fs.existsSync(tmpDir)) {
-            fs.mkdirSync(tmpDir, { recursive: true });
-        }
-
-        // Generate temp file paths
-        const tempInput = path.join(tmpDir, `temp_${Date.now()}`);
-        const tempOutput = path.join(tmpDir, `sticker_${Date.now()}.webp`);
-
         // Write media to temp file
         fs.writeFileSync(tempInput, mediaBuffer);
+        console.log('Media saved to temp file:', tempInput);
 
         // Check if media is animated (GIF or video)
         const isAnimated = mediaMessage.mimetype?.includes('gif') || 
                           mediaMessage.mimetype?.includes('video') || 
                           mediaMessage.seconds > 0;
 
-        // Convert to WebP using ffmpeg with optimized settings for animated/non-animated
-        const ffmpegCommand = isAnimated
-            ? `ffmpeg -i "${tempInput}" -vf "scale=512:512:force_original_aspect_ratio=decrease,fps=15,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 75 -compression_level 6 "${tempOutput}"`
-            : `ffmpeg -i "${tempInput}" -vf "scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 75 -compression_level 6 "${tempOutput}"`;
+        console.log('Processing sticker - isAnimated:', isAnimated, 'mimetype:', mediaMessage.mimetype);
 
-        await new Promise((resolve, reject) => {
-            exec(ffmpegCommand, (error) => {
-                if (error) {
-                    console.error('FFmpeg error:', error);
-                    reject(error);
-                } else resolve();
+        // Try Sharp first for static images (faster and no FFmpeg needed)
+        if (!isAnimated && sharp) {
+            try {
+                console.log('Using Sharp for image processing...');
+                await sharp(mediaBuffer)
+                    .resize(512, 512, {
+                        fit: 'contain',
+                        background: { r: 0, g: 0, b: 0, alpha: 0 }
+                    })
+                    .webp({ quality: 90 })
+                    .toFile(tempOutput);
+                console.log('Sharp completed successfully');
+            } catch (sharpError) {
+                console.error('Sharp error:', sharpError);
+                // Fall through to FFmpeg
+                throw sharpError;
+            }
+        } else {
+            // Convert to WebP using ffmpeg with optimized settings for animated/non-animated
+            const ffmpegCommand = isAnimated
+                ? `ffmpeg -y -i "${tempInput}" -vf "scale=512:512:force_original_aspect_ratio=decrease,fps=15,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000" -c:v libwebp -preset default -loop 0 -an -vsync 0 -pix_fmt yuva420p -quality 75 -compression_level 6 "${tempOutput}"`
+                : `ffmpeg -y -i "${tempInput}" -vf "scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000" -c:v libwebp -preset default -loop 0 -an -vsync 0 -pix_fmt yuva420p -quality 90 -compression_level 6 "${tempOutput}"`;
+
+            console.log('Using FFmpeg for conversion...');
+            await new Promise((resolve, reject) => {
+                exec(ffmpegCommand, (error, stdout, stderr) => {
+                    if (error) {
+                        console.error('FFmpeg error:', error);
+                        console.error('FFmpeg stderr:', stderr);
+                        reject(error);
+                    } else {
+                        console.log('FFmpeg completed successfully');
+                        resolve();
+                    }
+                });
             });
-        });
+        }
+
+        // Check if output file was created
+        if (!fs.existsSync(tempOutput)) {
+            throw new Error('FFmpeg failed to create output file');
+        }
 
         // Read the WebP file
         let webpBuffer = fs.readFileSync(tempOutput);
 
-        // If animated and output is too large, re-encode with harsher settings similar to stickercrop
+        // If animated and output is too large, re-encode with harsher settings
         if (isAnimated && webpBuffer.length > 1000 * 1024) {
             try {
                 const tempOutput2 = path.join(tmpDir, `sticker_fallback_${Date.now()}.webp`);
@@ -119,29 +157,9 @@ async function stickerCommand(sock, chatId, message) {
                     webpBuffer = fs.readFileSync(tempOutput2);
                     try { fs.unlinkSync(tempOutput2); } catch {}
                 }
-            } catch {}
-        }
-        // Read the WebP file
-        webpBuffer = fs.readFileSync(tempOutput);
-
-        // If animated and output is too large, re-encode with harsher settings similar to stickercrop
-        if (isAnimated && webpBuffer.length > 1000 * 1024) {
-            try {
-                const tempOutput2 = path.join(tmpDir, `sticker_fallback_${Date.now()}.webp`);
-                // Detect large source to decide compression level
-                const fileSizeKB = mediaBuffer.length / 1024;
-                const isLargeFile = fileSizeKB > 5000; // 5MB
-                const fallbackCmd = isLargeFile
-                    ? `ffmpeg -y -i "${tempInput}" -t 2 -vf "scale=512:512:force_original_aspect_ratio=decrease,fps=8,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 30 -compression_level 6 -b:v 100k -max_muxing_queue_size 1024 "${tempOutput2}"`
-                    : `ffmpeg -y -i "${tempInput}" -t 3 -vf "scale=512:512:force_original_aspect_ratio=decrease,fps=12,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 45 -compression_level 6 -b:v 150k -max_muxing_queue_size 1024 "${tempOutput2}"`;
-                await new Promise((resolve, reject) => {
-                    exec(fallbackCmd, (error) => error ? reject(error) : resolve());
-                });
-                if (fs.existsSync(tempOutput2)) {
-                    webpBuffer = fs.readFileSync(tempOutput2);
-                    try { fs.unlinkSync(tempOutput2); } catch {}
-                }
-            } catch {}
+            } catch (fallbackError) {
+                console.error('Fallback compression error:', fallbackError);
+            }
         }
 
         // Add metadata using webpmux
@@ -210,18 +228,35 @@ async function stickerCommand(sock, chatId, message) {
 
     } catch (error) {
         console.error('Error in sticker command:', error);
+        
+        // More detailed error message
+        let errorMsg = 'Failed to create sticker! ';
+        if (error.message && error.message.includes('FFmpeg')) {
+            errorMsg += 'Please make sure FFmpeg is installed.';
+        } else if (error.message && error.message.includes('ENOENT')) {
+            errorMsg += 'FFmpeg not found. Please install FFmpeg.';
+        } else {
+            errorMsg += 'Try again later.';
+        }
+        
         await sock.sendMessage(chatId, { 
-            text: 'Failed to create sticker! Try again later.',
+            text: errorMsg,
             contextInfo: {
                 forwardingScore: 999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363161513685998@newsletter',
-                    newsletterName: 'KnightBot MD',
+                    newsletterJid: '120363287485628066@newsletter',
+                    newsletterName: 'ZideeBot MD',
                     serverMessageId: -1
                 }
             }
         });
+        
+        // Clean up temp files even on error
+        try {
+            if (fs.existsSync(tempInput)) fs.unlinkSync(tempInput);
+            if (fs.existsSync(tempOutput)) fs.unlinkSync(tempOutput);
+        } catch {}
     }
 }
 

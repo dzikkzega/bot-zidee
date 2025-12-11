@@ -1,12 +1,42 @@
 {
   "users": [],
   "groups": [],
-  "antilink": {},
+  "antilink": {
+    "120363418714273061@g.us": {
+      "enabled": true,
+      "action": "delete"
+    },
+    "120363398539552239@g.us": {
+      "enabled": true,
+      "action": "kick"
+    }
+  },
   "antibadword": {},
   "warnings": {},
   "sudo": [],
-  "welcome": {},
+  "welcome": {
+    "120363418714273061@g.us": {
+      "enabled": true,
+      "message": "Welcome {user} to {group}! 🎉",
+      "channelId": "120363287485628066@newsletter"
+    },
+    "120363398539552239@g.us": {
+      "enabled": true,
+      "message": "Welcome {user} to {group}! 🎉",
+      "channelId": "120363287485628066@newsletter"
+    }
+  },
   "goodbye": {},
   "chatbot": {},
-  "autoReaction": false
+  "autoReaction": false,
+  "antitag": {
+    "120363418714273061@g.us": {
+      "enabled": true,
+      "action": "kick"
+    },
+    "120363398539552239@g.us": {
+      "enabled": true,
+      "action": "kick"
+    }
+  }
 }

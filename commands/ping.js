@@ -21,22 +21,43 @@ function formatTime(seconds) {
 async function pingCommand(sock, chatId, message) {
     try {
         const start = Date.now();
-        await sock.sendMessage(chatId, { text: 'Pong!' }, { quoted: message });
+        await sock.sendMessage(chatId, { text: 'Mengukur respons...' }, { quoted: message });
         const end = Date.now();
-        const ping = Math.round((end - start) / 2);
+        const ping = (end - start).toFixed(2);
 
+        // Bot uptime
         const uptimeInSeconds = process.uptime();
         const uptimeFormatted = formatTime(uptimeInSeconds);
 
-        const botInfo = `
-┏━━〔 🤖 𝐊𝐧𝐢𝐠𝐡𝐭𝐁𝐨𝐭-𝐌𝐃 〕━━┓
-┃ 🚀 Ping     : ${ping} ms
-┃ ⏱️ Uptime   : ${uptimeFormatted}
-┃ 🔖 Version  : v${settings.version}
-┗━━━━━━━━━━━━━━━━━━━┛`.trim();
+        // System uptime
+        const systemUptimeSeconds = os.uptime();
+        const systemUptimeFormatted = formatTime(systemUptimeSeconds);
+
+        // System info
+        const hostname = os.hostname();
+        const platform = os.platform();
+        const arch = os.arch();
+        const totalRAM = (os.totalmem() / (1024 * 1024)).toFixed(0);
+        const freeRAM = (os.freemem() / (1024 * 1024)).toFixed(0);
+        const cpuModel = os.cpus()[0].model;
+        const cpuCores = os.cpus().length;
+        const nodeVersion = process.version;
+
+        const botInfo = `🏓 *PONG! - STATUS SERVER*
+
+⏱ *Respon Bot*     : ${ping} ms
+🔄 *Uptime Bot*     : ${uptimeFormatted}
+🕒 *Uptime System*  : ${systemUptimeFormatted}
+
+💻 *Hostname*       : ${hostname}
+🌐 *Platform*       : ${platform} (${arch})
+🧠 *RAM Total*      : ${totalRAM} MB
+📉 *RAM Bebas*      : ${freeRAM} MB
+🧮 *CPU*            : ${cpuModel} (${cpuCores} cores)
+📂 *Node.js*        : ${nodeVersion}`;
 
         // Reply to the original message with the bot info
-        await sock.sendMessage(chatId, { text: botInfo},{ quoted: message });
+        await sock.sendMessage(chatId, { text: botInfo }, { quoted: message });
 
     } catch (error) {
         console.error('Error in ping command:', error);

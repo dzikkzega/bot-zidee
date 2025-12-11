@@ -57,22 +57,59 @@ module.exports = {
             }
 
         
-            // Call the remove background API
-            const apiUrl = `https://api.siputzx.my.id/api/iloveimg/removebg?image=${encodeURIComponent(imageUrl)}`;
+            // Call the remove background API with fallback
+            let apiUrl = `https://api.siputzx.my.id/api/iloveimg/removebg?image=${encodeURIComponent(imageUrl)}`;
             
-            const response = await axios.get(apiUrl, {
-                responseType: 'arraybuffer',
-                timeout: 30000, // 30 second timeout
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            let response;
+            try {
+                response = await axios.get(apiUrl, {
+                    responseType: 'arraybuffer',
+                    timeout: 30000,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+            } catch (primaryError) {
+                // Fallback ke API alternatif jika API utama gagal
+                console.log('Primary API failed, trying alternative...');
+                apiUrl = `https://api.remove.bg/v1.0/removebg`;
+                
+                // Try alternative API (need to convert to multipart if using remove.bg)
+                // For now, let's try another free API
+                apiUrl = `https://skizo.tech/api/removebg?apikey=nanogembul&url=${encodeURIComponent(imageUrl)}`;
+                
+                response = await axios.get(apiUrl, {
+                    responseType: 'json',
+                    timeout: 30000,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+                
+                // Check if alternative API returns image URL
+                if (response.data && response.data.url) {
+                    const imageResponse = await axios.get(response.data.url, {
+                        responseType: 'arraybuffer',
+                        timeout: 30000
+                    });
+                    response = imageResponse;
                 }
-            });
+            }
 
             if (response.status === 200 && response.data) {
                 // Send the processed image
                 await sock.sendMessage(chatId, {
                     image: response.data,
-                    caption: '✨ *Background removed successfully!*\n\n𝗣𝗥𝗢𝗖𝗘𝗦𝗦𝗘𝗗 𝗕𝗬 𝗞𝗡𝗜𝗚𝗛𝗧-𝗕𝗢𝗧'
+                    caption: '✨ *Background Removed Successfully!*\n\n🤖 Powered by ZideeBot\n📢 Join: https://whatsapp.com/channel/0029VafuRDyCMY0HwKx9OW30',
+                    contextInfo: {
+                        forwardingScore: 1,
+                        isForwarded: true,
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: '120363287485628066@newsletter',
+                            newsletterName: 'ZideeBot MD',
+                            serverMessageId: -1
+                        }
+                    }
                 }, { quoted: message });
             } else {
                 throw new Error('Failed to process image');
@@ -81,23 +118,32 @@ module.exports = {
         } catch (error) {
             console.error('RemoveBG Error:', error.message);
             
-            let errorMessage = '❌ Failed to remove background.';
+            let errorMessage = '❌ Gagal menghapus background.';
             
             if (error.response?.status === 429) {
-                errorMessage = '⏰ Rate limit exceeded. Please try again later.';
+                errorMessage = '⏰ Terlalu banyak request. Coba lagi nanti.';
             } else if (error.response?.status === 400) {
-                errorMessage = '❌ Invalid image URL or format.';
-            } else if (error.response?.status === 500) {
-                errorMessage = '🔧 Server error. Please try again later.';
+                errorMessage = '❌ URL gambar tidak valid atau format tidak didukung.';
+            } else if (error.response?.status === 500 || error.response?.status === 530) {
+                errorMessage = '🔧 Server API sedang bermasalah. Coba lagi dalam beberapa menit.';
             } else if (error.code === 'ECONNABORTED') {
-                errorMessage = '⏰ Request timeout. Please try again.';
+                errorMessage = '⏰ Request timeout. Ukuran gambar mungkin terlalu besar.';
             } else if (error.message.includes('ENOTFOUND') || error.message.includes('ECONNREFUSED')) {
-                errorMessage = '🌐 Network error. Please check your connection.';
+                errorMessage = '🌐 Koneksi internet bermasalah atau API tidak tersedia.';
             }
             
             await sock.sendMessage(chatId, { 
-                text: errorMessage 
-            }, { quoted: message });
+                text: `${errorMessage}\n\n💡 *Tips:*\n• Pastikan gambar berformat JPG/PNG\n• Ukuran gambar tidak terlalu besar (<5MB)\n• Coba lagi dalam beberapa saat`,
+                contextInfo: {
+                    forwardingScore: 1,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: '120363287485628066@newsletter',
+                        newsletterName: 'ZideeBot MD',
+                        serverMessageId: -1
+                    }
+                }
+            }, { quoted: message }).catch(console.error);
         }
     }
 };

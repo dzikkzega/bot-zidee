@@ -1,5 +1,5 @@
 /**
- * Knight Bot - A WhatsApp Bot
+ * ZideeBot - A WhatsApp Bot
  * Copyright (c) 2024 Professor
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -70,24 +70,17 @@ setInterval(() => {
     }
 }, 30_000) // check every 30 seconds
 
-let phoneNumber = "911234567890"
+let phoneNumber = ""
 let owner = JSON.parse(fs.readFileSync('./data/owner.json'))
 
-global.botname = "KNIGHT BOT"
+global.botname = "ZideeBot"
 global.themeemoji = "•"
 const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
 const useMobile = process.argv.includes("--mobile")
 
 // Only create readline interface if we're in an interactive environment
-const rl = process.stdin.isTTY ? readline.createInterface({ input: process.stdin, output: process.stdout }) : null
-const question = (text) => {
-    if (rl) {
-        return new Promise((resolve) => rl.question(text, resolve))
-    } else {
-        // In non-interactive environment, use ownerNumber from settings
-        return Promise.resolve(settings.ownerNumber || phoneNumber)
-    }
-}
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
 
 async function startXeonBotInc() {
@@ -160,8 +153,8 @@ async function startXeonBotInc() {
                             forwardingScore: 1,
                             isForwarded: true,
                             forwardedNewsletterMessageInfo: {
-                                newsletterJid: '120363161513685998@newsletter',
-                                newsletterName: 'KnightBot MD',
+                                newsletterJid: '120363287485628066@newsletter',
+                                newsletterName: 'ZideeBot MD',
                                 serverMessageId: -1
                             }
                         }
@@ -219,7 +212,7 @@ async function startXeonBotInc() {
         if (!!global.phoneNumber) {
             phoneNumber = global.phoneNumber
         } else {
-            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number 😍\nFormat: 6281376552730 (without + or spaces) : `)))
+            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`\n📱 Masukkan nomor WhatsApp Anda\nFormat: 628123456789 (tanpa + atau spasi)\n\nNomor HP: `)))
         }
 
         // Clean the phone number - remove any non-digit characters
@@ -228,7 +221,9 @@ async function startXeonBotInc() {
         // Validate the phone number using awesome-phonenumber
         const pn = require('awesome-phonenumber');
         if (!pn('+' + phoneNumber).isValid()) {
-            console.log(chalk.red('Invalid phone number. Please enter your full international number (e.g., 15551234567 for US, 447911123456 for UK, etc.) without + or spaces.'));
+            console.log(chalk.red('\n❌ Nomor HP tidak valid!'));
+            console.log(chalk.yellow('Format yang benar: nomor lengkap tanpa + atau spasi'));
+            console.log(chalk.yellow('Contoh: 628123456789 (Indonesia), 15551234567 (US), 447911123456 (UK)'));
             process.exit(1);
         }
 
@@ -236,11 +231,15 @@ async function startXeonBotInc() {
             try {
                 let code = await XeonBotInc.requestPairingCode(phoneNumber)
                 code = code?.match(/.{1,4}/g)?.join("-") || code
-                console.log(chalk.black(chalk.bgGreen(`Your Pairing Code : `)), chalk.black(chalk.white(code)))
-                console.log(chalk.yellow(`\nPlease enter this code in your WhatsApp app:\n1. Open WhatsApp\n2. Go to Settings > Linked Devices\n3. Tap "Link a Device"\n4. Enter the code shown above`))
+                console.log(chalk.black(chalk.bgGreen(`\n🔐 Your Pairing Code : `)), chalk.black(chalk.white(code)))
+                console.log(chalk.yellow(`\nMasukkan kode ini di aplikasi WhatsApp Anda:`))
+                console.log(chalk.cyan(`1. Buka WhatsApp`))
+                console.log(chalk.cyan(`2. Pergi ke Settings > Linked Devices`))
+                console.log(chalk.cyan(`3. Ketuk "Link a Device"`))
+                console.log(chalk.cyan(`4. Masukkan kode yang ditampilkan di atas\n`))
             } catch (error) {
                 console.error('Error requesting pairing code:', error)
-                console.log(chalk.red('Failed to get pairing code. Please check your phone number and try again.'))
+                console.log(chalk.red('\n❌ Gagal mendapatkan kode pairing. Periksa nomor HP Anda dan coba lagi.'))
             }
         }, 3000)
     }
@@ -268,11 +267,11 @@ async function startXeonBotInc() {
                     contextInfo: {
                         forwardingScore: 1,
                         isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: '120363161513685998@newsletter',
-                            newsletterName: 'KnightBot MD',
-                            serverMessageId: -1
-                        }
+                            forwardedNewsletterMessageInfo: {
+                                newsletterJid: '120363287485628066@newsletter',
+                                newsletterName: 'ZideeBot MD',
+                                serverMessageId: -1
+                            }
                     }
                 });
             } catch (error) {
@@ -280,7 +279,7 @@ async function startXeonBotInc() {
             }
 
             await delay(1999)
-            console.log(chalk.yellow(`\n\n                  ${chalk.bold.blue(`[ ${global.botname || 'KNIGHT BOT'} ]`)}\n\n`))
+            console.log(chalk.yellow(`\n\n                  ${chalk.bold.blue(`[ ${global.botname || 'ZIDEEBOT'} ]`)}\n\n`))
             console.log(chalk.cyan(`< ================================================== >`))
             console.log(chalk.magenta(`\n${global.themeemoji || '•'} YT CHANNEL: MR UNIQUE HACKER`))
             console.log(chalk.magenta(`${global.themeemoji || '•'} GITHUB: mrunqiuehacker`))

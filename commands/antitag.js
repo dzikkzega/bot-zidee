@@ -9,7 +9,9 @@ async function handleAntitagCommand(sock, chatId, userMessage, senderId, isSende
         }
 
         const prefix = '.';
-        const args = userMessage.slice(9).toLowerCase().trim().split(' ');
+        // Fix: properly extract args after .antitag command
+        const commandText = userMessage.toLowerCase().trim();
+        const args = commandText.split(' ').slice(1); // Skip the command itself
         const action = args[0];
 
         if (!action) {

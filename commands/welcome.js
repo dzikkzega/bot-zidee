@@ -65,18 +65,7 @@ async function handleJoinEvent(sock, id, participants) {
                     .replace(/{description}/g, groupDesc);
             } else {
                 // Default message if no custom message is set
-                const now = new Date();
-                const timeString = now.toLocaleString('en-US', {
-                    month: '2-digit',
-                    day: '2-digit', 
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true
-                });
-                
-                finalMessage = `╭╼━≪•𝙽𝙴𝚆 𝙼𝙴𝙼𝙱𝙴𝚁•≫━╾╮\n┃𝚆𝙴𝙻𝙲𝙾𝙼𝙴: @${displayName} 👋\n┃Member count: #${groupMetadata.participants.length}\n┃𝚃𝙸𝙼𝙴: ${timeString}⏰\n╰━━━━━━━━━━━━━━━╯\n\n*@${displayName}* Welcome to *${groupName}*! 🎉\n*Group 𝙳𝙴𝚂𝙲𝚁𝙸𝙿𝚃𝙸𝙾𝙽*\n${groupDesc}\n\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ Knight Bot*`;
+                finalMessage = `Selamat bergabung @${displayName} ke Grup ${groupName}\n\nSilahkan ketik *list* untuk melihat daftar menu\n\nSemoga betah🌟`;
             }
             
             // Try to send with image first (always try images)

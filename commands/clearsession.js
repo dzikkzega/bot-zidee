@@ -7,11 +7,11 @@ const channelInfo = {
     contextInfo: {
         forwardingScore: 999,
         isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-            newsletterJid: '120363161513685998@newsletter',
-            newsletterName: 'KnightBot MD',
-            serverMessageId: -1
-        }
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: '120363287485628066@newsletter',
+                newsletterName: 'ZideeBot MD',
+                serverMessageId: -1
+            }
     }
 };
 
