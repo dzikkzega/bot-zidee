@@ -1,6 +1,24 @@
 const { downloadMediaMessage } = require('@whiskeysockets/baileys');
 const axios = require('axios');
-const sharp = require('sharp');
+const { Jimp } = require('jimp');
+
+/**
+ * PERBEDAAN SHARP vs JIMP:
+ * 
+ * SHARP:
+ * - Library native (C++) menggunakan libvips
+ * - Sangat cepat untuk image processing
+ * - Membutuhkan kompilasi native (node-gyp)
+ * - TIDAK BISA diinstall di Android/Termux (armv7)
+ * - Cocok untuk server Linux/Windows dengan build tools
+ * 
+ * JIMP (JavaScript Image Manipulation Program):
+ * - Pure JavaScript, tidak ada dependency native
+ * - Lebih lambat dari Sharp, tapi cukup untuk bot
+ * - Bisa diinstall di SEMUA platform termasuk Android/Termux
+ * - Tidak perlu node-gyp atau build tools
+ * - Cocok untuk portabilitas dan deployment mudah
+ */
 
 async function blurCommand(sock, chatId, message, quotedMessage) {
     try {
@@ -43,23 +61,28 @@ async function blurCommand(sock, chatId, message, quotedMessage) {
             return;
         }
 
-        // Resize and optimize image
-        const resizedImage = await sharp(imageBuffer)
-            .resize(800, 800, { // Resize to max 800x800
-                fit: 'inside',
-                withoutEnlargement: true
-            })
-            .jpeg({ quality: 80 }) // Convert to JPEG with 80% quality
-            .toBuffer();
-
-        // Apply blur effect directly using sharp
-        const blurredImage = await sharp(resizedImage)
-            .blur(10) // Blur radius of 10
-            .toBuffer();
+        // Process image using Jimp
+        const image = await Jimp.read(imageBuffer);
+        
+        // Resize to max 800x800 while maintaining aspect ratio
+        const maxSize = 800;
+        if (image.width > maxSize || image.height > maxSize) {
+            if (image.width > image.height) {
+                image.resize({ w: maxSize });
+            } else {
+                image.resize({ h: maxSize });
+            }
+        }
+        
+        // Apply blur effect (Jimp uses Gaussian blur, radius 10)
+        image.blur(10);
+        
+        // Convert to buffer
+        const blurredBuffer = await image.getBuffer('image/jpeg', { quality: 80 });
 
         // Send the blurred image
         await sock.sendMessage(chatId, {
-            image: blurredImage,
+            image: blurredBuffer,
             caption: '*[ ✔ ] Image Blurred Successfully*',
             contextInfo: {
                 forwardingScore: 1,

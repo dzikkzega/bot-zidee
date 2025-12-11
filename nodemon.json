@@ -1,0 +1,21 @@
+{
+  "watch": [
+    "*.js",
+    "commands/**/*.js",
+    "lib/**/*.js",
+    "settings.js",
+    "config.js"
+  ],
+  "ignore": [
+    "session/**",
+    "data/**",
+    "downloads/**",
+    "tmp/**",
+    "node_modules/**",
+    "*.log",
+    "package.json",
+    "package-lock.json"
+  ],
+  "ext": "js,json",
+  "delay": 2000
+}

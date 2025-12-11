@@ -1,4 +1,14 @@
-const sharp = require('sharp');
+/**
+ * Sticker to Image Converter
+ * Menggunakan Jimp untuk konversi webp ke png
+ * 
+ * JIMP dipilih karena:
+ * - Pure JavaScript (tidak perlu compile native)
+ * - Bisa jalan di Android/Termux tanpa masalah
+ * - Support format webp baca dan tulis
+ */
+
+const { Jimp } = require('jimp');
 const fs = require('fs');
 const fsPromises = require('fs/promises');
 const fse = require('fs-extra');
@@ -16,7 +26,7 @@ const scheduleFileDeletion = (filePath) => {
         } catch (error) {
             console.error(`Failed to delete file:`, error);
         }
-    }, 10000); // 5 minutes
+    }, 10000); // 10 seconds
 };
 
 const convertStickerToImage = async (sock, quotedMessage, chatId) => {
@@ -27,20 +37,21 @@ const convertStickerToImage = async (sock, quotedMessage, chatId) => {
             return;
         }
 
-        const stickerFilePath = path.join(tempDir, `sticker_${Date.now()}.webp`);
         const outputImagePath = path.join(tempDir, `converted_image_${Date.now()}.png`);
 
+        // Download sticker
         const stream = await downloadContentFromMessage(stickerMessage, 'sticker');
         let buffer = Buffer.from([]);
         for await (const chunk of stream) buffer = Buffer.concat([buffer, chunk]);
 
-        await fsPromises.writeFile(stickerFilePath, buffer);
-        await sharp(stickerFilePath).toFormat('png').toFile(outputImagePath);
+        // Convert webp to png using Jimp
+        const image = await Jimp.read(buffer);
+        await image.write(outputImagePath);
 
+        // Read and send
         const imageBuffer = await fsPromises.readFile(outputImagePath);
         await sock.sendMessage(chatId, { image: imageBuffer, caption: 'Here is the converted image!' });
 
-        scheduleFileDeletion(stickerFilePath);
         scheduleFileDeletion(outputImagePath);
     } catch (error) {
         console.error('Error converting sticker to image:', error);

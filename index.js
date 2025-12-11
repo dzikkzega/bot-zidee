@@ -75,11 +75,21 @@ let owner = JSON.parse(fs.readFileSync('./data/owner.json'))
 
 global.botname = "ZideeBot"
 global.themeemoji = "•"
-const pairingCode = !!phoneNumber || process.argv.includes("--pairing-code")
+
+// PAIRING CODE MODE:
+// - Jika phoneNumber sudah diisi di atas, langsung pakai pairing code
+// - Jika kosong, akan prompt di terminal untuk input nomor
+// - Gunakan --qr flag untuk paksa mode QR
+const useQR = process.argv.includes("--qr")
+const pairingCode = !useQR // Default selalu pairing code kecuali ada --qr flag
 const useMobile = process.argv.includes("--mobile")
 
-// Only create readline interface if we're in an interactive environment
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+// Selalu buat readline interface untuk input manual
+const rl = readline.createInterface({ 
+    input: process.stdin, 
+    output: process.stdout 
+})
+
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
 
 
@@ -92,7 +102,7 @@ async function startXeonBotInc() {
         const XeonBotInc = makeWASocket({
             version,
             logger: pino({ level: 'silent' }),
-            printQRInTerminal: !pairingCode,
+            printQRInTerminal: !pairingCode, // QR hanya muncul jika bukan pairing mode
             browser: ["Ubuntu", "Chrome", "20.0.04"],
             auth: {
                 creds: state.creds,
@@ -114,6 +124,66 @@ async function startXeonBotInc() {
 
         // Save credentials when they update
         XeonBotInc.ev.on('creds.update', saveCreds)
+
+        // Handle pairing code - tanya nomor dulu, request code nanti setelah socket siap
+        let inputPhoneNumber = null
+        if (pairingCode && !state.creds.registered) {
+            if (useMobile) throw new Error('Cannot use pairing code with mobile api')
+
+            inputPhoneNumber = phoneNumber
+            
+            // Jika phoneNumber kosong, tanya user
+            if (!inputPhoneNumber) {
+                console.log(chalk.cyan('\n═══════════════════════════════════════'))
+                console.log(chalk.green('         📱 PAIRING CODE MODE'))
+                console.log(chalk.cyan('═══════════════════════════════════════\n'))
+                
+                inputPhoneNumber = await question(chalk.bgBlack(chalk.greenBright(
+                    `Masukkan nomor WhatsApp Anda\nFormat: 628123456789 (tanpa + atau spasi)\n\n📱 Nomor HP: `
+                )))
+            }
+
+            // Clean the phone number - remove any non-digit characters
+            inputPhoneNumber = inputPhoneNumber.replace(/[^0-9]/g, '')
+
+            if (!inputPhoneNumber) {
+                console.log(chalk.red('\n❌ Nomor HP tidak boleh kosong!'))
+                process.exit(1)
+            }
+
+            // Validate the phone number using awesome-phonenumber
+            const pn = require('awesome-phonenumber')
+            if (!pn('+' + inputPhoneNumber).isValid()) {
+                console.log(chalk.red('\n❌ Nomor HP tidak valid!'))
+                console.log(chalk.yellow('Format yang benar: nomor lengkap tanpa + atau spasi'))
+                console.log(chalk.yellow('Contoh: 628123456789 (Indonesia), 15551234567 (US)'))
+                process.exit(1)
+            }
+
+            console.log(chalk.yellow('\n⏳ Menunggu koneksi... pairing code akan muncul dalam beberapa detik...\n'))
+
+            // Request pairing code dengan setTimeout untuk memastikan socket siap
+            setTimeout(async () => {
+                try {
+                    let code = await XeonBotInc.requestPairingCode(inputPhoneNumber)
+                    code = code?.match(/.{1,4}/g)?.join("-") || code
+                    
+                    console.log(chalk.cyan('\n═══════════════════════════════════════'))
+                    console.log(chalk.bgGreen(chalk.black(` 🔐 PAIRING CODE: ${code} `)))
+                    console.log(chalk.cyan('═══════════════════════════════════════'))
+                    console.log(chalk.yellow('\n📋 Cara memasukkan kode:'))
+                    console.log(chalk.white('   1. Buka WhatsApp di HP'))
+                    console.log(chalk.white('   2. Pergi ke Settings > Linked Devices'))
+                    console.log(chalk.white('   3. Ketuk "Link a Device"'))
+                    console.log(chalk.white('   4. Ketuk "Link with phone number instead"'))
+                    console.log(chalk.white(`   5. Masukkan kode: ${code}\n`))
+                } catch (error) {
+                    console.error('Error requesting pairing code:', error)
+                    console.log(chalk.red('\n❌ Gagal mendapatkan pairing code.'))
+                    console.log(chalk.yellow('Coba: npm run dev -- --qr untuk mode QR code'))
+                }
+            }, 5000) // Tunggu 5 detik untuk socket siap
+        }
 
     store.bind(XeonBotInc.ev)
 
@@ -204,51 +274,11 @@ async function startXeonBotInc() {
 
     XeonBotInc.serializeM = (m) => smsg(XeonBotInc, m, store)
 
-    // Handle pairing code
-    if (pairingCode && !XeonBotInc.authState.creds.registered) {
-        if (useMobile) throw new Error('Cannot use pairing code with mobile api')
-
-        let phoneNumber
-        if (!!global.phoneNumber) {
-            phoneNumber = global.phoneNumber
-        } else {
-            phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`\n📱 Masukkan nomor WhatsApp Anda\nFormat: 628123456789 (tanpa + atau spasi)\n\nNomor HP: `)))
-        }
-
-        // Clean the phone number - remove any non-digit characters
-        phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
-
-        // Validate the phone number using awesome-phonenumber
-        const pn = require('awesome-phonenumber');
-        if (!pn('+' + phoneNumber).isValid()) {
-            console.log(chalk.red('\n❌ Nomor HP tidak valid!'));
-            console.log(chalk.yellow('Format yang benar: nomor lengkap tanpa + atau spasi'));
-            console.log(chalk.yellow('Contoh: 628123456789 (Indonesia), 15551234567 (US), 447911123456 (UK)'));
-            process.exit(1);
-        }
-
-        setTimeout(async () => {
-            try {
-                let code = await XeonBotInc.requestPairingCode(phoneNumber)
-                code = code?.match(/.{1,4}/g)?.join("-") || code
-                console.log(chalk.black(chalk.bgGreen(`\n🔐 Your Pairing Code : `)), chalk.black(chalk.white(code)))
-                console.log(chalk.yellow(`\nMasukkan kode ini di aplikasi WhatsApp Anda:`))
-                console.log(chalk.cyan(`1. Buka WhatsApp`))
-                console.log(chalk.cyan(`2. Pergi ke Settings > Linked Devices`))
-                console.log(chalk.cyan(`3. Ketuk "Link a Device"`))
-                console.log(chalk.cyan(`4. Masukkan kode yang ditampilkan di atas\n`))
-            } catch (error) {
-                console.error('Error requesting pairing code:', error)
-                console.log(chalk.red('\n❌ Gagal mendapatkan kode pairing. Periksa nomor HP Anda dan coba lagi.'))
-            }
-        }, 3000)
-    }
-
     // Connection handling
     XeonBotInc.ev.on('connection.update', async (s) => {
         const { connection, lastDisconnect, qr } = s
         
-        if (qr) {
+        if (qr && !pairingCode) {
             console.log(chalk.yellow('📱 QR Code generated. Please scan with WhatsApp.'))
         }
         
@@ -257,6 +287,9 @@ async function startXeonBotInc() {
         }
         
         if (connection == "open") {
+            // Close readline jika masih terbuka
+            if (rl) rl.close()
+            
             console.log(chalk.magenta(` `))
             console.log(chalk.yellow(`🌿Connected to => ` + JSON.stringify(XeonBotInc.user, null, 2)))
 

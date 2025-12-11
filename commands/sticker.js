@@ -1,3 +1,14 @@
+/**
+ * Sticker Command
+ * Menggunakan Jimp sebagai pengganti Sharp untuk gambar statis
+ * FFmpeg tetap digunakan untuk video/GIF animated
+ * 
+ * JIMP dipilih karena:
+ * - Pure JavaScript (tidak perlu compile native)
+ * - Bisa jalan di Android/Termux tanpa masalah
+ * - Cukup cepat untuk image processing sederhana
+ */
+
 const { downloadMediaMessage } = require('@whiskeysockets/baileys');
 const { exec } = require('child_process');
 const fs = require('fs');
@@ -5,12 +16,7 @@ const path = require('path');
 const settings = require('../settings');
 const webp = require('node-webpmux');
 const crypto = require('crypto');
-let sharp;
-try {
-    sharp = require('sharp');
-} catch {
-    console.log('Sharp not available, will use FFmpeg only');
-}
+const { Jimp } = require('jimp');
 
 async function stickerCommand(sock, chatId, message) {
     // The message that will be quoted in the reply.
@@ -94,22 +100,29 @@ async function stickerCommand(sock, chatId, message) {
 
         console.log('Processing sticker - isAnimated:', isAnimated, 'mimetype:', mediaMessage.mimetype);
 
-        // Try Sharp first for static images (faster and no FFmpeg needed)
-        if (!isAnimated && sharp) {
+        // Use Jimp for static images (pure JS, works everywhere including Termux)
+        if (!isAnimated) {
             try {
-                console.log('Using Sharp for image processing...');
-                await sharp(mediaBuffer)
-                    .resize(512, 512, {
-                        fit: 'contain',
-                        background: { r: 0, g: 0, b: 0, alpha: 0 }
-                    })
-                    .webp({ quality: 90 })
-                    .toFile(tempOutput);
-                console.log('Sharp completed successfully');
-            } catch (sharpError) {
-                console.error('Sharp error:', sharpError);
+                console.log('Using Jimp for image processing...');
+                const image = await Jimp.read(mediaBuffer);
+                
+                // Resize to 512x512 with padding (contain mode)
+                const size = 512;
+                const resized = image.contain({ w: size, h: size });
+                
+                // Save as webp
+                await resized.write(tempOutput);
+                console.log('Jimp completed successfully');
+            } catch (jimpError) {
+                console.error('Jimp error, falling back to FFmpeg:', jimpError.message);
                 // Fall through to FFmpeg
-                throw sharpError;
+                const ffmpegCommand = `ffmpeg -y -i "${tempInput}" -vf "scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:(ow-iw)/2:(oh-ih)/2:color=#00000000" -c:v libwebp -preset default -loop 0 -an -vsync 0 -pix_fmt yuva420p -quality 90 -compression_level 6 "${tempOutput}"`;
+                await new Promise((resolve, reject) => {
+                    exec(ffmpegCommand, (error, stdout, stderr) => {
+                        if (error) reject(error);
+                        else resolve();
+                    });
+                });
             }
         } else {
             // Convert to WebP using ffmpeg with optimized settings for animated/non-animated
