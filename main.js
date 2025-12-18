@@ -126,7 +126,6 @@ const setProfilePicture = require('./commands/setpp');
 const { setGroupDescription, setGroupName, setGroupPhoto } = require('./commands/groupmanage');
 const instagramCommand = require('./commands/instagram');
 const facebookCommand = require('./commands/facebook');
-const spotifyCommand = require('./commands/spotify');
 const playCommand = require('./commands/play');
 const tiktokCommand = require('./commands/tiktok');
 const songCommand = require('./commands/song');
@@ -1070,9 +1069,6 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 break;
             case userMessageWithoutPrefix.startsWith('music'):
                 await playCommand(sock, chatId, message);
-                break;
-            case userMessageWithoutPrefix.startsWith('spotify'):
-                await spotifyCommand(sock, chatId, message);
                 break;
             case userMessageWithoutPrefix.startsWith('play') || userMessageWithoutPrefix.startsWith('mp3') || userMessageWithoutPrefix.startsWith('ytmp3') || userMessageWithoutPrefix.startsWith('song'):
                 await songCommand(sock, chatId, message);
