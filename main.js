@@ -122,7 +122,7 @@ const updlistCommand = require("./commands/updlist");
 const dellistCommand = require("./commands/dellist");
 const productDetailCommand = require("./commands/product-detail");
 const productPathCommand = require("./commands/product-path");
-const { findProduct } = require("./lib/productManager");
+const { findProduct, findProductGlobal } = require("./lib/productManager");
 const antibadwordCommand = require("./commands/antibadword");
 const {
   handleChatbotCommand,
@@ -1694,6 +1694,52 @@ async function handleMessages(sock, messageUpdate, printLog) {
         break;
       case userMessageWithoutPrefix.startsWith("music"):
         await playCommand(sock, chatId, message);
+        break;
+      case userMessageWithoutPrefix.startsWith("spotify"):
+        {
+          const productName = userMessageWithoutPrefix.split(/\s+/)[0].trim();
+
+          // Try to send product from current group first
+          const productFound = await productDetailCommand(
+            sock,
+            chatId,
+            message,
+            productName
+          );
+
+          // If not found in current group, search globally
+          if (!productFound) {
+            const globalRes = findProductGlobal(productName);
+            if (globalRes && globalRes.product) {
+              const product = globalRes.product;
+              if (product.image && product.image.data) {
+                const imageBuffer = Buffer.from(product.image.data, "base64");
+                await sock.sendMessage(
+                  chatId,
+                  {
+                    image: imageBuffer,
+                    caption: product.description,
+                    mimetype: product.image.mimetype || "image/jpeg",
+                  },
+                  { quoted: message }
+                );
+              } else {
+                await sock.sendMessage(
+                  chatId,
+                  { text: product.description },
+                  { quoted: message }
+                );
+              }
+            } else {
+              await sock.sendMessage(
+                chatId,
+                { text: `Produk *${productName}* tidak tersedia.` },
+                { quoted: message }
+              );
+            }
+          }
+        }
+        commandExecuted = true;
         break;
       case userMessageWithoutPrefix.startsWith("play") ||
         userMessageWithoutPrefix.startsWith("mp3") ||
