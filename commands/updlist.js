@@ -1,5 +1,6 @@
 const { updateProduct, findProduct } = require("../lib/productManager");
 const isAdmin = require("../lib/isAdmin");
+const parseProductArgs = require("../lib/parseProductArgs");
 
 async function updlistCommand(
   sock,
@@ -42,9 +43,8 @@ async function updlistCommand(
     }
 
     // Parse arguments
-    const parts = args.split("#");
-
-    if (parts.length !== 2) {
+    const parsedArgs = parseProductArgs(args);
+    if (!parsedArgs) {
       await sock.sendMessage(
         chatId,
         {
@@ -55,8 +55,8 @@ async function updlistCommand(
       return;
     }
 
-    const productName = parts[0].trim();
-    const newDescription = parts[1].trim();
+    const productName = parsedArgs.productName;
+    const newDescription = parsedArgs.description;
 
     if (!productName || !newDescription) {
       await sock.sendMessage(
