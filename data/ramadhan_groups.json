@@ -1,0 +1,26 @@
+{
+  "info": "Ramadhan Auto-Scheduler Groups Data",
+  "description": "Stores group IDs that have enabled auto sahur & iftar reminders",
+  "example": {
+    "120363123456789@g.us": {
+      "enabled": true,
+      "messages": {
+        "sahur": "🌙 Selamat sahur semuanya...",
+        "iftar": "🌅 Waktu berbuka telah tiba..."
+      },
+      "enabledAt": "2026-02-19T08:00:00.000Z",
+      "lastSahur": null,
+      "lastIftar": null
+    }
+  },
+  "120363418714273061@g.us": {
+    "enabled": true,
+    "messages": {
+      "sahur": "🌙 *Selamat sahur semuanya.*\n\nSemoga Allah memberikan kekuatan dan kelancaran dalam menjalankan puasa hari ini. Jangan lupa niat ya 🤲",
+      "iftar": "🌅 *Waktu berbuka telah tiba.*\n\nSelamat berbuka puasa, semoga Allah menerima amal ibadah kita hari ini 🤲"
+    },
+    "enabledAt": "2026-02-18T22:08:19.656Z",
+    "lastSahur": null,
+    "lastIftar": null
+  }
+}

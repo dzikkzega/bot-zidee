@@ -87,6 +87,7 @@ const memeCommand = require("./commands/meme");
 const tagCommand = require("./commands/tag");
 const tagNotAdminCommand = require("./commands/tagnotadmin");
 const hideTagCommand = require("./commands/hidetag");
+const ramadhanCommand = require("./commands/ramadhan");
 const jokeCommand = require("./commands/joke");
 const quoteCommand = require("./commands/quote");
 const factCommand = require("./commands/fact");
@@ -791,6 +792,16 @@ async function handleMessages(sock, messageUpdate, printLog) {
         break;
       case userMessageWithoutPrefix === "tagnotadmin":
         await tagNotAdminCommand(sock, chatId, senderId, message);
+        break;
+      case userMessageWithoutPrefix.startsWith("ramadhan"):
+        {
+          const args = userMessageWithoutPrefix.split(" ").slice(1);
+          if (global.ramadhanScheduler) {
+            await ramadhanCommand(sock, chatId, senderId, args, message, global.ramadhanScheduler);
+          } else {
+            await sock.sendMessage(chatId, { text: "❌ Ramadhan scheduler belum diinisialisasi. Silakan restart bot." }, { quoted: message });
+          }
+        }
         break;
       case userMessageWithoutPrefix.startsWith("hidetag"):
       case userMessageWithoutPrefix.startsWith("h "):

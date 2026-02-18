@@ -68,6 +68,9 @@ const { join } = require("path");
 // Import lightweight store
 const store = require("./lib/lightweight_store");
 
+// Import Ramadhan Scheduler
+const RamadhanScheduler = require("./lib/scheduler");
+
 // Initialize store
 store.readFromFile();
 const settings = require("./settings");
@@ -416,6 +419,14 @@ async function startXeonBotInc() {
           )
         );
         console.log(chalk.blue(`Bot Version: ${settings.version}`));
+        
+        // Initialize Ramadhan Scheduler
+        try {
+          global.ramadhanScheduler = new RamadhanScheduler(XeonBotInc);
+          console.log(chalk.green(`🕌 Ramadhan Scheduler initialized!`));
+        } catch (error) {
+          console.error(chalk.red(`Error initializing Ramadhan Scheduler: ${error.message}`));
+        }
       }
 
       if (connection === "close") {
