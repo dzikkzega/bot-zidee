@@ -1,0 +1,87 @@
+# ============================================
+# .dockerignore
+# File yang diabaikan saat build Docker image
+# ============================================
+
+# Node modules (akan di-install ulang di container)
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+
+# Session dan data (akan di-mount sebagai volume)
+session/
+baileys_store.json
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# Logs
+logs/
+*.log
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# IDE dan Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment files (sensitive data)
+.env
+.env.local
+.env.*.local
+
+# Backup files
+*.bak
+*.bak.*
+*.backup
+
+# Documentation (tidak perlu di dalam image)
+README.md
+*.md
+docs/
+
+# Windows files
+Thumbs.db
+desktop.ini
+*.lnk
+
+# PM2 (tidak perlu di Docker)
+ecosystem.config.js
+*.bat
+*.ps1
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Cache
+.cache/
+.npm/
+.node_repl_history
+
+# Build artifacts
+dist/
+build/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Optional: Jika ada file besar yang tidak perlu
+# assets/
+# products/
+# data/

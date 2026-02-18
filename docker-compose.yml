@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  zideebot:
+    # Nama container
+    container_name: zideebot-whatsapp
+
+    # Build dari Dockerfile di folder ini
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Restart policy - selalu restart jika crash
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      # - NODE_ENV=production
+      - TZ=Asia/Jakarta
+      # Tambahkan environment variables lain sesuai kebutuhan:
+      # - SESSION_ID=your_session_id
+      # - OWNER_NUMBER=628xxx
+      # - BOT_NAME=ZideeBot
+
+    # Mount volumes untuk data persistence
+    volumes:
+      # Session WhatsApp (PENTING! Jangan sampai hilang)
+      - ./session:/app/session
+
+      # Temporary files
+      - ./temp:/app/temp
+      - ./tmp:/app/tmp
+
+      # Logs
+      - ./logs:/app/logs
+
+      # Data dan products
+      - ./data:/app/data
+      - ./products:/app/products
+
+      # Assets (jika ada perubahan)
+      - ./assets:/app/assets
+
+      # Config files (opsional, jika ingin edit dari luar container)
+      - ./config.js:/app/config.js
+      - ./settings.js:/app/settings.js
+
+    # Network mode (gunakan host jika ada masalah koneksi)
+    # network_mode: host
+
+    # Resource limits (opsional, sesuaikan dengan server)
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # TTY untuk interactive mode (jika perlu pairing code)
+    stdin_open: true
+    tty: true
+
+# Networks (opsional)
+networks:
+  default:
+    name: zideebot-network
