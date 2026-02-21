@@ -10,20 +10,23 @@ process.env.TEMP = customTemp;
 process.env.TMP = customTemp;
 
 // Auto-cleaner every 3 hours
-setInterval(() => {
-  fs.readdir(customTemp, (err, files) => {
-    if (err) return;
-    for (const file of files) {
-      const filePath = path.join(customTemp, file);
-      fs.stat(filePath, (err, stats) => {
-        if (!err && Date.now() - stats.mtimeMs > 3 * 60 * 60 * 1000) {
-          fs.unlink(filePath, () => {});
-        }
-      });
-    }
-  });
-  console.log("🧹 Temp folder auto-cleaned");
-}, 3 * 60 * 60 * 1000);
+setInterval(
+  () => {
+    fs.readdir(customTemp, (err, files) => {
+      if (err) return;
+      for (const file of files) {
+        const filePath = path.join(customTemp, file);
+        fs.stat(filePath, (err, stats) => {
+          if (!err && Date.now() - stats.mtimeMs > 3 * 60 * 60 * 1000) {
+            fs.unlink(filePath, () => {});
+          }
+        });
+      }
+    });
+    console.log("🧹 Temp folder auto-cleaned");
+  },
+  3 * 60 * 60 * 1000,
+);
 
 const settings = require("./settings");
 require("./config.js");
@@ -88,6 +91,7 @@ const tagCommand = require("./commands/tag");
 const tagNotAdminCommand = require("./commands/tagnotadmin");
 const hideTagCommand = require("./commands/hidetag");
 const ramadhanCommand = require("./commands/ramadhan");
+const { setOpenGCCommand, setCloseGCCommand } = require("./commands/ramadhan");
 const jokeCommand = require("./commands/joke");
 const quoteCommand = require("./commands/quote");
 const factCommand = require("./commands/fact");
@@ -259,7 +263,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           {
             text: "📢 *Join our Channel:*\nhttps://whatsapp.com/channel/0029VafuRDyCMY0HwKx9OW30",
           },
-          { quoted: message }
+          { quoted: message },
         );
         return;
       } else if (buttonId === "owner") {
@@ -272,7 +276,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           {
             text: `🔗 *Support*\n\nhttps://chat.whatsapp.com/GA4WrOFythU6g3BFVubYM7?mode=wwt`,
           },
-          { quoted: message }
+          { quoted: message },
         );
         return;
       }
@@ -311,7 +315,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
       /^(help|menu|bot|ping|alive|settings|mode)/i.test(userMessage)
     ) {
       console.log(
-        `📝 Command used in ${isGroup ? "group" : "private"}: ${userMessage}`
+        `📝 Command used in ${isGroup ? "group" : "private"}: ${userMessage}`,
       );
     }
     // Read bot mode once; don't early-return so moderation can still run in private mode
@@ -345,7 +349,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
         sock,
         chatId,
         senderId,
-        userMessageWithoutPrefix
+        userMessageWithoutPrefix,
       );
       return;
     }
@@ -370,7 +374,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          senderId
+          senderId,
         );
       }
       // Antilink checks message text internally, so run it even if userMessage is empty
@@ -422,7 +426,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
       "setgpp",
     ];
     const isAdminCommand = adminCommands.some((cmd) =>
-      userMessageWithoutPrefix.startsWith(cmd)
+      userMessageWithoutPrefix.startsWith(cmd),
     );
 
     // List of owner commands (WITHOUT prefix)
@@ -440,7 +444,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
       "pmblocker",
     ];
     const isOwnerCommand = ownerCommands.some((cmd) =>
-      userMessageWithoutPrefix.startsWith(cmd)
+      userMessageWithoutPrefix.startsWith(cmd),
     );
 
     let isSenderAdmin = false;
@@ -459,7 +463,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             text: "Please make the bot an admin to use admin commands.",
             ...channelInfo,
           },
-          { quoted: message }
+          { quoted: message },
         );
         return;
       }
@@ -479,7 +483,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Sorry, only group admins can use this command.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -492,7 +496,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
         await sock.sendMessage(
           chatId,
           { text: "❌ This command is only available for the owner or sudo!" },
-          { quoted: message }
+          { quoted: message },
         );
         return;
       }
@@ -527,7 +531,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               message,
               productText,
               buffer,
-              mimetype
+              mimetype,
             );
             commandExecuted = true;
           } else if (captionLower.startsWith("updlist ")) {
@@ -538,7 +542,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               message,
               productText,
               buffer,
-              mimetype
+              mimetype,
             );
             commandExecuted = true;
           }
@@ -568,7 +572,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Please reply to a sticker with the simage command to convert it.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
         }
         commandExecuted = true;
@@ -582,7 +586,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           senderId,
           mentionedJidListKick,
-          message
+          message,
         );
         break;
       case userMessageWithoutPrefix.startsWith("mute"):
@@ -601,7 +605,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "Please provide a valid number of minutes or use mute with no number to mute immediately.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
           } else {
             await muteCommand(sock, chatId, senderId, message, muteDuration);
@@ -617,7 +621,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             await sock.sendMessage(
               chatId,
               { text: "Only owner/sudo can use ban in private chat." },
-              { quoted: message }
+              { quoted: message },
             );
             break;
           }
@@ -630,7 +634,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             await sock.sendMessage(
               chatId,
               { text: "Only owner/sudo can use unban in private chat." },
-              { quoted: message }
+              { quoted: message },
             );
             break;
           }
@@ -643,7 +647,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           {
             text: "Hai aku adalah ZideeBot\nAda yang bisa aku bantu?",
           },
-          { quoted: message }
+          { quoted: message },
         );
         commandExecuted = true;
         break;
@@ -670,7 +674,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           senderId,
           mentionedJidListWarn,
-          message
+          message,
         );
         break;
       case userMessageWithoutPrefix.startsWith("tts"):
@@ -697,7 +701,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           await sock.sendMessage(
             chatId,
             { text: "Only bot owner can use this command!", ...channelInfo },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -724,7 +728,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: `Current bot mode: *${currentMode}*\n\nUsage: mode public/private\n\nExample:\nmode public - Allow everyone to use bot\nmode private - Restrict to owner only`,
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -736,7 +740,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Usage: mode public/private\n\nExample:\nmode public - Allow everyone to use bot\nmode private - Restrict to owner only",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -748,7 +752,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           // Save updated data
           fs.writeFileSync(
             "./data/messageCount.json",
-            JSON.stringify(data, null, 2)
+            JSON.stringify(data, null, 2),
           );
 
           await sock.sendMessage(chatId, {
@@ -768,7 +772,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           await sock.sendMessage(
             chatId,
             { text: "Only owner/sudo can use anticall." },
-            { quoted: message }
+            { quoted: message },
           );
           break;
         }
@@ -797,9 +801,68 @@ async function handleMessages(sock, messageUpdate, printLog) {
         {
           const args = userMessageWithoutPrefix.split(" ").slice(1);
           if (global.ramadhanScheduler) {
-            await ramadhanCommand(sock, chatId, senderId, args, message, global.ramadhanScheduler);
+            await ramadhanCommand(
+              sock,
+              chatId,
+              senderId,
+              args,
+              message,
+              global.ramadhanScheduler,
+            );
           } else {
-            await sock.sendMessage(chatId, { text: "❌ Ramadhan scheduler belum diinisialisasi. Silakan restart bot." }, { quoted: message });
+            await sock.sendMessage(
+              chatId,
+              {
+                text: "❌ Ramadhan scheduler belum diinisialisasi. Silakan restart bot.",
+              },
+              { quoted: message },
+            );
+          }
+        }
+        break;
+      case userMessageWithoutPrefix.startsWith("setopengc"):
+        {
+          const args = userMessageWithoutPrefix.split(" ").slice(1);
+          if (global.ramadhanScheduler) {
+            await setOpenGCCommand(
+              sock,
+              chatId,
+              senderId,
+              args,
+              message,
+              global.ramadhanScheduler,
+            );
+          } else {
+            await sock.sendMessage(
+              chatId,
+              {
+                text: "❌ Ramadhan scheduler belum diinisialisasi. Silakan restart bot.",
+              },
+              { quoted: message },
+            );
+          }
+        }
+        break;
+      case userMessageWithoutPrefix.startsWith("setclosegc"):
+        {
+          const args = userMessageWithoutPrefix.split(" ").slice(1);
+          if (global.ramadhanScheduler) {
+            await setCloseGCCommand(
+              sock,
+              chatId,
+              senderId,
+              args,
+              message,
+              global.ramadhanScheduler,
+            );
+          } else {
+            await sock.sendMessage(
+              chatId,
+              {
+                text: "❌ Ramadhan scheduler belum diinisialisasi. Silakan restart bot.",
+              },
+              { quoted: message },
+            );
           }
         }
         break;
@@ -827,7 +890,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             senderId,
             messageText,
             replyMessage,
-            message
+            message,
           );
         }
         break;
@@ -842,7 +905,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           senderId,
           messageText,
           replyMessage,
-          message
+          message,
         );
         break;
       case userMessageWithoutPrefix.startsWith("antilink"):
@@ -853,7 +916,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -864,7 +927,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Please make the bot an admin first.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -874,7 +937,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           userMessageWithoutPrefix,
           senderId,
           isSenderAdmin,
-          message
+          message,
         );
         break;
       case userMessageWithoutPrefix.startsWith("antitag"):
@@ -885,7 +948,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -896,7 +959,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Please make the bot an admin first.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -906,7 +969,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           userMessageWithoutPrefix,
           senderId,
           isSenderAdmin,
-          message
+          message,
         );
         break;
       case userMessageWithoutPrefix === "meme":
@@ -932,7 +995,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Please specify a city, e.g., weather London",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
         }
         break;
@@ -953,7 +1016,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Please provide a valid position number for Tic-Tac-Toe move.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
         } else {
           tictactoeMove(sock, chatId, senderId, position);
@@ -976,7 +1039,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Please guess a letter using guess <letter>",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
         }
         break;
@@ -994,7 +1057,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "Please provide an answer using answer <answer>",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
         }
         break;
@@ -1036,7 +1099,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           stupidQuotedMsg,
           stupidMentionedJid,
           senderId,
-          stupidArgs
+          stupidArgs,
         );
         break;
       case userMessageWithoutPrefix === "dare":
@@ -1072,7 +1135,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             await sock.sendMessage(
               chatId,
               { text: "❌ Only admins can use this command!" },
-              { quoted: message }
+              { quoted: message },
             );
           }
         } else {
@@ -1093,7 +1156,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             await sock.sendMessage(
               chatId,
               { text: "❌ Only admins can use this command!" },
-              { quoted: message }
+              { quoted: message },
             );
           }
         } else {
@@ -1141,7 +1204,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "Sorry, only group admins can use this command.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
           }
         } else {
@@ -1151,7 +1214,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
         }
         break;
@@ -1172,7 +1235,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "Sorry, only group admins can use this command.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
           }
         } else {
@@ -1182,7 +1245,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
         }
         break;
@@ -1201,7 +1264,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1214,7 +1277,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           await sock.sendMessage(
             chatId,
             { text: "*Bot must be admin to use this feature*", ...channelInfo },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1224,7 +1287,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           senderId,
-          isSenderAdmin
+          isSenderAdmin,
         );
         break;
       case userMessageWithoutPrefix.startsWith("chatbot"):
@@ -1235,7 +1298,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups.",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1249,7 +1312,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "*Only admins or bot owner can use this command*",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1283,7 +1346,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups!",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1299,7 +1362,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups!",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1315,7 +1378,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups!",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1331,7 +1394,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups!",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1346,7 +1409,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups!",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1354,7 +1417,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           const { isSenderAdmin, isBotAdmin } = await isAdmin(
             sock,
             chatId,
-            senderId
+            senderId,
           );
           if (!isSenderAdmin) {
             await sock.sendMessage(
@@ -1363,7 +1426,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "❌ Hanya admin yang dapat membuka grup.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
             return;
           }
@@ -1374,7 +1437,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "❌ Bot harus menjadi admin untuk membuka grup.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
             return;
           }
@@ -1386,7 +1449,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "✅ Grup telah dibuka. Semua anggota sekarang dapat mengirim pesan.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
           } catch (error) {
             console.error("Error opening group:", error);
@@ -1397,7 +1460,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                   "❌ Gagal membuka grup. Terjadi kesalahan: " + error.message,
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
           }
         }
@@ -1411,7 +1474,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               text: "This command can only be used in groups!",
               ...channelInfo,
             },
-            { quoted: message }
+            { quoted: message },
           );
           return;
         }
@@ -1419,7 +1482,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           const { isSenderAdmin, isBotAdmin } = await isAdmin(
             sock,
             chatId,
-            senderId
+            senderId,
           );
           if (!isSenderAdmin) {
             await sock.sendMessage(
@@ -1428,7 +1491,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "❌ Hanya admin yang dapat menutup grup.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
             return;
           }
@@ -1439,7 +1502,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "❌ Bot harus menjadi admin untuk menutup grup.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
             return;
           }
@@ -1451,7 +1514,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                 text: "✅ Grup telah ditutup. Hanya admin yang dapat mengirim pesan.",
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
           } catch (error) {
             console.error("Error closing group:", error);
@@ -1462,7 +1525,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
                   "❌ Gagal menutup grup. Terjadi kesalahan: " + error.message,
                 ...channelInfo,
               },
-              { quoted: message }
+              { quoted: message },
             );
           }
         }
@@ -1502,7 +1565,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "metallic"
+          "metallic",
         );
         break;
       case userMessageWithoutPrefix.startsWith("ice"):
@@ -1511,7 +1574,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "ice"
+          "ice",
         );
         break;
       case userMessageWithoutPrefix.startsWith("snow"):
@@ -1520,7 +1583,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "snow"
+          "snow",
         );
         break;
       case userMessageWithoutPrefix.startsWith("impressive"):
@@ -1529,7 +1592,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "impressive"
+          "impressive",
         );
         break;
       case userMessageWithoutPrefix.startsWith("matrix"):
@@ -1538,7 +1601,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "matrix"
+          "matrix",
         );
         break;
       case userMessageWithoutPrefix.startsWith("light"):
@@ -1547,7 +1610,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "light"
+          "light",
         );
         break;
       case userMessageWithoutPrefix.startsWith("neon"):
@@ -1556,7 +1619,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "neon"
+          "neon",
         );
         break;
       case userMessageWithoutPrefix.startsWith("devil"):
@@ -1565,7 +1628,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "devil"
+          "devil",
         );
         break;
       case userMessageWithoutPrefix.startsWith("purple"):
@@ -1574,7 +1637,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "purple"
+          "purple",
         );
         break;
       case userMessageWithoutPrefix.startsWith("thunder"):
@@ -1583,7 +1646,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "thunder"
+          "thunder",
         );
         break;
       case userMessageWithoutPrefix.startsWith("leaves"):
@@ -1592,7 +1655,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "leaves"
+          "leaves",
         );
         break;
       case userMessageWithoutPrefix.startsWith("1917"):
@@ -1601,7 +1664,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "1917"
+          "1917",
         );
         break;
       case userMessageWithoutPrefix.startsWith("arena"):
@@ -1610,7 +1673,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "arena"
+          "arena",
         );
         break;
       case userMessageWithoutPrefix.startsWith("hacker"):
@@ -1619,7 +1682,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "hacker"
+          "hacker",
         );
         break;
       case userMessageWithoutPrefix.startsWith("sand"):
@@ -1628,7 +1691,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "sand"
+          "sand",
         );
         break;
       case userMessageWithoutPrefix.startsWith("blackpink"):
@@ -1637,7 +1700,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "blackpink"
+          "blackpink",
         );
         break;
       case userMessageWithoutPrefix.startsWith("glitch"):
@@ -1646,7 +1709,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "glitch"
+          "glitch",
         );
         break;
       case userMessageWithoutPrefix.startsWith("fire"):
@@ -1655,7 +1718,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           chatId,
           message,
           userMessageWithoutPrefix,
-          "fire"
+          "fire",
         );
         break;
       case userMessageWithoutPrefix.startsWith("antidelete"):
@@ -1715,7 +1778,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             sock,
             chatId,
             message,
-            productName
+            productName,
           );
 
           // If not found in current group, search globally
@@ -1732,20 +1795,20 @@ async function handleMessages(sock, messageUpdate, printLog) {
                     caption: product.description,
                     mimetype: product.image.mimetype || "image/jpeg",
                   },
-                  { quoted: message }
+                  { quoted: message },
                 );
               } else {
                 await sock.sendMessage(
                   chatId,
                   { text: product.description },
-                  { quoted: message }
+                  { quoted: message },
                 );
               }
             } else {
               await sock.sendMessage(
                 chatId,
                 { text: `Produk *${productName}* tidak tersedia.` },
-                { quoted: message }
+                { quoted: message },
               );
             }
           }
@@ -1779,24 +1842,24 @@ async function handleMessages(sock, messageUpdate, printLog) {
           sock,
           chatId,
           message,
-          userMessageWithoutPrefix.slice(commandLength)
+          userMessageWithoutPrefix.slice(commandLength),
         );
         return;
       case userMessageWithoutPrefix.startsWith("ss") ||
         userMessageWithoutPrefix.startsWith("ssweb") ||
         userMessageWithoutPrefix.startsWith("screenshot"):
         const ssCommandLength = userMessageWithoutPrefix.startsWith(
-          "screenshot"
+          "screenshot",
         )
           ? 10
           : userMessageWithoutPrefix.startsWith("ssweb")
-          ? 5
-          : 2;
+            ? 5
+            : 2;
         await handleSsCommand(
           sock,
           chatId,
           message,
-          userMessageWithoutPrefix.slice(ssCommandLength).trim()
+          userMessageWithoutPrefix.slice(ssCommandLength).trim(),
         );
         break;
       case userMessageWithoutPrefix.startsWith("areact") ||
@@ -2008,7 +2071,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
         await removebgCommand.exec(
           sock,
           message,
-          userMessageWithoutPrefix.split(" ").slice(1)
+          userMessageWithoutPrefix.split(" ").slice(1),
         );
         break;
       case userMessageWithoutPrefix.startsWith("remini") ||
@@ -2018,7 +2081,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
           sock,
           chatId,
           message,
-          userMessageWithoutPrefix.split(" ").slice(1)
+          userMessageWithoutPrefix.split(" ").slice(1),
         );
         break;
       case userMessageWithoutPrefix.startsWith("sora"):
@@ -2063,7 +2126,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
         await handleAutotypingForMessage(
           sock,
           chatId,
-          userMessageWithoutPrefix
+          userMessageWithoutPrefix,
         );
 
         if (isGroup) {
@@ -2075,7 +2138,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
             sock,
             chatId,
             message,
-            userMessageWithoutPrefix
+            userMessageWithoutPrefix,
           );
 
           // Only run chatbot if product not found and in public mode or for owner/sudo
@@ -2089,7 +2152,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
               chatId,
               message,
               userMessageWithoutPrefix,
-              senderId
+              senderId,
             );
           }
         }
@@ -2120,7 +2183,7 @@ async function handleMessages(sock, messageUpdate, printLog) {
         },
         {
           quoted: message,
-        }
+        },
       );
     }
 

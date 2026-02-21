@@ -21,6 +21,19 @@
     },
     "enabledAt": "2026-02-18T22:08:19.656Z",
     "lastSahur": null,
-    "lastIftar": null
+    "lastIftar": null,
+    "closeTime": "22:00"
+  },
+  "120363398539552239@g.us": {
+    "enabled": true,
+    "messages": {
+      "sahur": "🌙 *Selamat sahur semuanya.*\n\nSemoga Allah memberikan kekuatan dan kelancaran dalam menjalankan puasa hari ini. Jangan lupa niat ya 🤲",
+      "iftar": "🌅 *Waktu berbuka telah tiba.*\n\nSelamat berbuka puasa, semoga Allah menerima amal ibadah kita hari ini 🤲"
+    },
+    "enabledAt": "2026-02-21T05:32:00.038Z",
+    "lastSahur": null,
+    "lastIftar": null,
+    "openTime": "09:00",
+    "closeTime": "22:00"
   }
 }

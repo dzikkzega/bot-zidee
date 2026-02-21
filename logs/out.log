@@ -6807,3 +6807,139 @@
 2026-02-16 09:18:36 +07:00: • 🤖 Bot Connected Successfully! ✅
 2026-02-16 09:18:36 +07:00: Bot Version: 3.0.5
 2026-02-16 09:18:41 +07:00: 📝 Command used in group: bot
+2026-02-21 12:21:03 +07:00: 🔄 Connecting to WhatsApp...
+2026-02-21 12:21:05 +07:00:  
+2026-02-21 12:21:05 +07:00: 🌿Connected to => {
+2026-02-21 12:21:05 +07:00:   "id": "628811613142:12@s.whatsapp.net",
+2026-02-21 12:21:05 +07:00:   "lid": "181192422883427:12@lid"
+2026-02-21 12:21:05 +07:00: }
+2026-02-21 12:21:05 +07:00: Closing session: SessionEntry {
+2026-02-21 12:21:05 +07:00:   _chains: {
+2026-02-21 12:21:05 +07:00:     'BZ1xBde1uL6fLuj++vWuKb+9qxyKpL/cOlH7ZX1oOMhw': { chainKey: [Object], chainType: 1, messageKeys: {} }
+2026-02-21 12:21:05 +07:00:   },
+2026-02-21 12:21:05 +07:00:   registrationId: 1069334773,
+2026-02-21 12:21:05 +07:00:   currentRatchet: {
+2026-02-21 12:21:05 +07:00:     ephemeralKeyPair: {
+2026-02-21 12:21:05 +07:00:       pubKey: <Buffer 05 9d 71 05 d7 b5 b8 be 9f 2e e8 fe fa f5 ae 29 bf bd ab 1c 8a a4 bf dc 3a 51 fb 65 7d 68 38 c8 70>,
+2026-02-21 12:21:05 +07:00:       privKey: <Buffer c0 85 2e ae 69 e6 5f db 18 5c e3 c2 fd 54 03 2c f5 46 86 c2 c5 20 c6 ae 6e 3a e4 4b 23 1e 31 50>
+2026-02-21 12:21:05 +07:00:     },
+2026-02-21 12:21:05 +07:00:     lastRemoteEphemeralKey: <Buffer 05 44 4a a7 71 cb 54 90 ef 2a f0 42 10 df f1 91 ec 00 bc 1a 72 f5 8e 45 0a f2 8e 85 19 c7 ab 41 4c>,
+2026-02-21 12:21:05 +07:00:     previousCounter: 0,
+2026-02-21 12:21:05 +07:00:     rootKey: <Buffer e5 c9 38 b4 79 51 1d 47 1e 73 97 26 de 5a 17 6b 0b 87 72 91 76 89 8c f7 30 97 c0 8b 37 9d 42 8d>
+2026-02-21 12:21:05 +07:00:   },
+2026-02-21 12:21:05 +07:00:   indexInfo: {
+2026-02-21 12:21:05 +07:00:     baseKey: <Buffer 05 4e fc 3d e6 86 96 a2 94 30 21 84 51 f1 22 2f 9f 92 b6 46 52 b5 ba 1a 3a 30 a0 e7 6c 1c 34 05 78>,
+2026-02-21 12:21:05 +07:00:     baseKeyType: 1,
+2026-02-21 12:21:05 +07:00:     closed: -1,
+2026-02-21 12:21:05 +07:00:     used: 1771651223675,
+2026-02-21 12:21:05 +07:00:     created: 1771651223675,
+2026-02-21 12:21:05 +07:00:     remoteIdentityKey: <Buffer 05 8d a3 ce 16 f1 7c eb e6 f9 d2 e6 ce e1 50 02 39 aa 64 44 6d 6a f9 41 c2 66 10 20 b5 07 1a 7d 78>
+2026-02-21 12:21:05 +07:00:   },
+2026-02-21 12:21:05 +07:00:   pendingPreKey: {
+2026-02-21 12:21:05 +07:00:     signedKeyId: 12103318,
+2026-02-21 12:21:05 +07:00:     baseKey: <Buffer 05 4e fc 3d e6 86 96 a2 94 30 21 84 51 f1 22 2f 9f 92 b6 46 52 b5 ba 1a 3a 30 a0 e7 6c 1c 34 05 78>,
+2026-02-21 12:21:05 +07:00:     preKeyId: 16405234
+2026-02-21 12:21:05 +07:00:   }
+2026-02-21 12:21:05 +07:00: }
+2026-02-21 12:21:07 +07:00: 
+2026-02-21 12:21:07 +07:00: 
+2026-02-21 12:21:07 +07:00:                   [ ZideeBot ]
+2026-02-21 12:21:07 +07:00: 
+2026-02-21 12:21:07 +07:00: 
+2026-02-21 12:21:07 +07:00: < ================================================== >
+2026-02-21 12:21:07 +07:00: 
+2026-02-21 12:21:07 +07:00: • YT CHANNEL: MR UNIQUE HACKER
+2026-02-21 12:21:07 +07:00: • GITHUB: mrunqiuehacker
+2026-02-21 12:21:07 +07:00: • WA NUMBER: 628811613142,6282311727134
+2026-02-21 12:21:07 +07:00: • CREDIT: MR UNIQUE HACKER
+2026-02-21 12:21:07 +07:00: • 🤖 Bot Connected Successfully! ✅
+2026-02-21 12:21:07 +07:00: Bot Version: 3.0.5
+2026-02-21 12:21:07 +07:00: 🕌 Initializing Ramadhan Schedulers...
+2026-02-21 12:21:07 +07:00: 🕌 Sahur scheduler initialized (03:30 WIB)
+2026-02-21 12:21:07 +07:00: 🕌 Daily Maghrib fetch scheduler initialized (00:01 WIB)
+2026-02-21 12:21:07 +07:00: 🕌 All Ramadhan schedulers are active! ✅
+2026-02-21 12:21:07 +07:00: 🕌 Ramadhan Scheduler initialized!
+2026-02-21 12:21:08 +07:00: 🕌 Maghrib time fetched: 18:14 WIB
+2026-02-21 12:21:08 +07:00: 🕌 Maghrib reminder scheduled at 18:14 WIB (Cron: 14 18 * * *)
+2026-02-21 12:21:22 +07:00: 📝 Command used in group: bot
+2026-02-21 12:21:30 +07:00: 🔄 Connecting to WhatsApp...
+2026-02-21 12:21:33 +07:00:  
+2026-02-21 12:21:33 +07:00: 🌿Connected to => {
+2026-02-21 12:21:33 +07:00:   "id": "628811613142:12@s.whatsapp.net",
+2026-02-21 12:21:33 +07:00:   "lid": "181192422883427:12@lid"
+2026-02-21 12:21:33 +07:00: }
+2026-02-21 12:21:35 +07:00: Closing session: SessionEntry {
+2026-02-21 12:21:35 +07:00:   _chains: {
+2026-02-21 12:21:35 +07:00:     BdXbSozORQBjjnmflzb0p366jvE0Hb4vn5taXbQBtEw6: { chainKey: [Object], chainType: 1, messageKeys: {} }
+2026-02-21 12:21:35 +07:00:   },
+2026-02-21 12:21:35 +07:00:   registrationId: 1069334773,
+2026-02-21 12:21:35 +07:00:   currentRatchet: {
+2026-02-21 12:21:35 +07:00:     ephemeralKeyPair: {
+2026-02-21 12:21:35 +07:00:       pubKey: <Buffer 05 d5 db 4a 8c ce 45 00 63 8e 79 9f 97 36 f4 a7 7e ba 8e f1 34 1d be 2f 9f 9b 5a 5d b4 01 b4 4c 3a>,
+2026-02-21 12:21:35 +07:00:       privKey: <Buffer 90 5c 27 ac 6b 47 10 76 1d 46 a4 c4 5d a3 cc 89 32 ea d8 a9 41 bc 98 03 12 3f 51 cc fe c8 7d 54>
+2026-02-21 12:21:35 +07:00:     },
+2026-02-21 12:21:35 +07:00:     lastRemoteEphemeralKey: <Buffer 05 44 4a a7 71 cb 54 90 ef 2a f0 42 10 df f1 91 ec 00 bc 1a 72 f5 8e 45 0a f2 8e 85 19 c7 ab 41 4c>,
+2026-02-21 12:21:35 +07:00:     previousCounter: 0,
+2026-02-21 12:21:35 +07:00:     rootKey: <Buffer 7a b6 ed b9 ce fd 29 1c e7 27 dd 61 d6 e2 17 f4 48 cb 8f 18 ff 1c e9 e3 03 8f 84 4e 2e ed 36 94>
+2026-02-21 12:21:35 +07:00:   },
+2026-02-21 12:21:35 +07:00:   indexInfo: {
+2026-02-21 12:21:35 +07:00:     baseKey: <Buffer 05 de 30 35 9f ef 16 47 b0 74 2c 6e 41 cb 96 f0 11 e2 26 48 e6 64 42 58 0f f5 44 11 a4 79 ea c3 5e>,
+2026-02-21 12:21:35 +07:00:     baseKeyType: 1,
+2026-02-21 12:21:35 +07:00:     closed: -1,
+2026-02-21 12:21:35 +07:00:     used: 1771651265914,
+2026-02-21 12:21:35 +07:00:     created: 1771651265914,
+2026-02-21 12:21:35 +07:00:     remoteIdentityKey: <Buffer 05 8d a3 ce 16 f1 7c eb e6 f9 d2 e6 ce e1 50 02 39 aa 64 44 6d 6a f9 41 c2 66 10 20 b5 07 1a 7d 78>
+2026-02-21 12:21:35 +07:00:   },
+2026-02-21 12:21:35 +07:00:   pendingPreKey: {
+2026-02-21 12:21:35 +07:00:     signedKeyId: 12103318,
+2026-02-21 12:21:35 +07:00:     baseKey: <Buffer 05 de 30 35 9f ef 16 47 b0 74 2c 6e 41 cb 96 f0 11 e2 26 48 e6 64 42 58 0f f5 44 11 a4 79 ea c3 5e>,
+2026-02-21 12:21:35 +07:00:     preKeyId: 16405302
+2026-02-21 12:21:35 +07:00:   }
+2026-02-21 12:21:35 +07:00: }
+2026-02-21 12:21:37 +07:00: 
+2026-02-21 12:21:37 +07:00: 
+2026-02-21 12:21:37 +07:00:                   [ ZideeBot ]
+2026-02-21 12:21:37 +07:00: 
+2026-02-21 12:21:37 +07:00: 
+2026-02-21 12:21:37 +07:00: < ================================================== >
+2026-02-21 12:21:37 +07:00: 
+2026-02-21 12:21:37 +07:00: • YT CHANNEL: MR UNIQUE HACKER
+2026-02-21 12:21:37 +07:00: • GITHUB: mrunqiuehacker
+2026-02-21 12:21:37 +07:00: • WA NUMBER: 628811613142,6282311727134
+2026-02-21 12:21:37 +07:00: • CREDIT: MR UNIQUE HACKER
+2026-02-21 12:21:37 +07:00: • 🤖 Bot Connected Successfully! ✅
+2026-02-21 12:21:37 +07:00: Bot Version: 3.0.5
+2026-02-21 12:21:37 +07:00: 🕌 Initializing Ramadhan Schedulers...
+2026-02-21 12:21:37 +07:00: 🕌 Sahur scheduler initialized (03:30 WIB)
+2026-02-21 12:21:37 +07:00: 🕌 Daily Maghrib fetch scheduler initialized (00:01 WIB)
+2026-02-21 12:21:37 +07:00: 🕌 All Ramadhan schedulers are active! ✅
+2026-02-21 12:21:37 +07:00: 🕌 Ramadhan Scheduler initialized!
+2026-02-21 12:21:37 +07:00: 📝 Command used in group: ping
+2026-02-21 12:21:37 +07:00: 🕌 Maghrib time fetched: 18:14 WIB
+2026-02-21 12:21:37 +07:00: 🕌 Maghrib reminder scheduled at 18:14 WIB (Cron: 14 18 * * *)
+2026-02-21 12:26:27 +07:00: Closing session: SessionEntry {
+2026-02-21 12:26:27 +07:00:   _chains: {
+2026-02-21 12:26:27 +07:00:     BXWJF5PdB0mLbotCpt652RhOYicG26MdW5iFWoKlEWhQ: { chainKey: [Object], chainType: 2, messageKeys: {} },
+2026-02-21 12:26:27 +07:00:     BZJUdv4OZ1THd9m0cOPJW8x3sBjmXJX9YdmW3b8q371S: { chainKey: [Object], chainType: 1, messageKeys: {} }
+2026-02-21 12:26:27 +07:00:   },
+2026-02-21 12:26:27 +07:00:   registrationId: 14142,
+2026-02-21 12:26:27 +07:00:   currentRatchet: {
+2026-02-21 12:26:27 +07:00:     ephemeralKeyPair: {
+2026-02-21 12:26:27 +07:00:       pubKey: <Buffer 05 92 54 76 fe 0e 67 54 c7 77 d9 b4 70 e3 c9 5b cc 77 b0 18 e6 5c 95 fd 61 d9 96 dd bf 2a df bd 52>,
+2026-02-21 12:26:27 +07:00:       privKey: <Buffer 38 c1 57 56 53 ce 2c e1 4c d3 dc 9b b7 cc 37 a9 41 1e 7f 7b 4a c3 30 b8 29 87 a7 5f ca e6 7c 6a>
+2026-02-21 12:26:27 +07:00:     },
+2026-02-21 12:26:27 +07:00:     lastRemoteEphemeralKey: <Buffer 05 75 89 17 93 dd 07 49 8b 6e 8b 42 a6 de b9 d9 18 4e 62 27 06 db a3 1d 5b 98 85 5a 82 a5 11 68 50>,
+2026-02-21 12:26:27 +07:00:     previousCounter: 0,
+2026-02-21 12:26:27 +07:00:     rootKey: <Buffer f0 5f 10 75 bf 9b 6a 56 66 07 d7 c9 b8 ec 58 f2 12 c9 1e 19 19 90 a2 f8 15 18 c9 06 13 d8 eb fa>
+2026-02-21 12:26:27 +07:00:   },
+2026-02-21 12:26:27 +07:00:   indexInfo: {
+2026-02-21 12:26:27 +07:00:     baseKey: <Buffer 05 6b 62 09 6f 81 97 e2 8e e9 89 ed cc 60 5f 1e 0c d4 48 ba 93 2b 19 96 89 3c 77 62 5d 63 e3 28 6e>,
+2026-02-21 12:26:27 +07:00:     baseKeyType: 1,
+2026-02-21 12:26:27 +07:00:     closed: -1,
+2026-02-21 12:26:27 +07:00:     used: 1771452480615,
+2026-02-21 12:26:27 +07:00:     created: 1771452106528,
+2026-02-21 12:26:27 +07:00:     remoteIdentityKey: <Buffer 05 b8 57 fe 6d 4e e7 d7 7c 0b fe 9a 34 79 6b 46 57 8e 45 d5 4d 70 9f 00 aa d5 b2 e0 0b 79 46 bb 46>
+2026-02-21 12:26:27 +07:00:   }
+2026-02-21 12:26:27 +07:00: }
+2026-02-21 12:28:04 +07:00: 📝 Command used in group: bot
+2026-02-21 12:28:08 +07:00: 📝 Command used in group: bot
