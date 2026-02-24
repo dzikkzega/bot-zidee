@@ -130,7 +130,7 @@ async function startXeonBotInc() {
         creds: state.creds,
         keys: makeCacheableSignalKeyStore(
           state.keys,
-          pino({ level: "fatal" }).child({ level: "fatal" })
+          pino({ level: "fatal" }).child({ level: "fatal" }),
         ),
       },
       markOnlineOnConnect: true,
@@ -166,9 +166,9 @@ async function startXeonBotInc() {
         inputPhoneNumber = await question(
           chalk.bgBlack(
             chalk.greenBright(
-              `Masukkan nomor WhatsApp Anda\nFormat: 628123456789 (tanpa + atau spasi)\n\n📱 Nomor HP: `
-            )
-          )
+              `Masukkan nomor WhatsApp Anda\nFormat: 628123456789 (tanpa + atau spasi)\n\n📱 Nomor HP: `,
+            ),
+          ),
         );
       }
 
@@ -185,18 +185,18 @@ async function startXeonBotInc() {
       if (!pn("+" + inputPhoneNumber).isValid()) {
         console.log(chalk.red("\n❌ Nomor HP tidak valid!"));
         console.log(
-          chalk.yellow("Format yang benar: nomor lengkap tanpa + atau spasi")
+          chalk.yellow("Format yang benar: nomor lengkap tanpa + atau spasi"),
         );
         console.log(
-          chalk.yellow("Contoh: 628123456789 (Indonesia), 15551234567 (US)")
+          chalk.yellow("Contoh: 628123456789 (Indonesia), 15551234567 (US)"),
         );
         process.exit(1);
       }
 
       console.log(
         chalk.yellow(
-          "\n⏳ Menunggu koneksi... pairing code akan muncul dalam beberapa detik...\n"
-        )
+          "\n⏳ Menunggu koneksi... pairing code akan muncul dalam beberapa detik...\n",
+        ),
       );
 
       // Request pairing code dengan setTimeout untuk memastikan socket siap
@@ -213,14 +213,14 @@ async function startXeonBotInc() {
           console.log(chalk.white("   2. Pergi ke Settings > Linked Devices"));
           console.log(chalk.white('   3. Ketuk "Link a Device"'));
           console.log(
-            chalk.white('   4. Ketuk "Link with phone number instead"')
+            chalk.white('   4. Ketuk "Link with phone number instead"'),
           );
           console.log(chalk.white(`   5. Masukkan kode: ${code}\n`));
         } catch (error) {
           console.error("Error requesting pairing code:", error);
           console.log(chalk.red("\n❌ Gagal mendapatkan pairing code."));
           console.log(
-            chalk.yellow("Coba: npm run dev -- --qr untuk mode QR code")
+            chalk.yellow("Coba: npm run dev -- --qr untuk mode QR code"),
           );
         }
       }, 5000); // Tunggu 5 detik untuk socket siap
@@ -316,8 +316,8 @@ async function startXeonBotInc() {
             v.name ||
               v.subject ||
               PhoneNumber("+" + id.replace("@s.whatsapp.net", "")).getNumber(
-                "international"
-              )
+                "international",
+              ),
           );
         });
       else
@@ -328,14 +328,14 @@ async function startXeonBotInc() {
                 name: "WhatsApp",
               }
             : id === XeonBotInc.decodeJid(XeonBotInc.user.id)
-            ? XeonBotInc.user
-            : store.contacts[id] || {};
+              ? XeonBotInc.user
+              : store.contacts[id] || {};
       return (
         (withoutContact ? "" : v.name) ||
         v.subject ||
         v.verifiedName ||
         PhoneNumber("+" + jid.replace("@s.whatsapp.net", "")).getNumber(
-          "international"
+          "international",
         )
       );
     };
@@ -364,19 +364,49 @@ async function startXeonBotInc() {
         return result;
       } catch (err) {
         _sendFailStreak++;
-        console.error(chalk.red(`❌ sendMessage GAGAL [${_sendFailStreak}/5]: ${err.message}`));
+        console.error(
+          chalk.red(
+            `❌ sendMessage GAGAL [${_sendFailStreak}/5]: ${err.message}`,
+          ),
+        );
 
         if (_sendFailStreak >= 5) {
           _sendFailStreak = 0;
-          console.log(chalk.bgRed.white("\n╔══════════════════════════════════════════════════╗"));
-          console.log(chalk.bgRed.white("║  ⚠️  GHOST SESSION TERDETEKSI!                    ║"));
-          console.log(chalk.bgRed.white("╚══════════════════════════════════════════════════╝"));
-          console.log(chalk.yellow("💡 Bot menerima pesan tapi tidak bisa mengirim."));
-          console.log(chalk.yellow("💡 Penyebab: Session dipakai di environment lain (VPS/Local)."));
-          console.log(chalk.cyan("🔧 Auto-fix: Menghapus session & restart untuk pairing ulang..."));
+          console.log(
+            chalk.bgRed.white(
+              "\n╔══════════════════════════════════════════════════╗",
+            ),
+          );
+          console.log(
+            chalk.bgRed.white(
+              "║  ⚠️  GHOST SESSION TERDETEKSI!                    ║",
+            ),
+          );
+          console.log(
+            chalk.bgRed.white(
+              "╚══════════════════════════════════════════════════╝",
+            ),
+          );
+          console.log(
+            chalk.yellow("💡 Bot menerima pesan tapi tidak bisa mengirim."),
+          );
+          console.log(
+            chalk.yellow(
+              "💡 Penyebab: Session dipakai di environment lain (VPS/Local).",
+            ),
+          );
+          console.log(
+            chalk.cyan(
+              "🔧 Auto-fix: Menghapus session & restart untuk pairing ulang...",
+            ),
+          );
           try {
             rmSync("./session", { recursive: true, force: true });
-            console.log(chalk.yellow("🗑️  Folder session dihapus. Restart dalam 3 detik..."));
+            console.log(
+              chalk.yellow(
+                "🗑️  Folder session dihapus. Restart dalam 3 detik...",
+              ),
+            );
           } catch (e) {
             console.error("Gagal hapus session:", e.message);
           }
@@ -392,7 +422,7 @@ async function startXeonBotInc() {
 
       if (qr && !pairingCode) {
         console.log(
-          chalk.yellow("📱 QR Code generated. Please scan with WhatsApp.")
+          chalk.yellow("📱 QR Code generated. Please scan with WhatsApp."),
         );
       }
 
@@ -407,14 +437,15 @@ async function startXeonBotInc() {
         console.log(chalk.magenta(` `));
         console.log(
           chalk.yellow(
-            `🌿Connected to => ` + JSON.stringify(XeonBotInc.user, null, 2)
-          )
+            `🌿Connected to => ` + JSON.stringify(XeonBotInc.user, null, 2),
+          ),
         );
 
         // ── Health Check: Pastikan bot BISA kirim pesan setelah connect ──
         // Ini mendeteksi "ghost session" akibat pindah environment VPS ↔ Local.
         // Coba kirim ke nomor bot sendiri hingga 3 kali sebelum auto-fix.
-        const _botSelfJid = XeonBotInc.user.id.split(":")[0] + "@s.whatsapp.net";
+        const _botSelfJid =
+          XeonBotInc.user.id.split(":")[0] + "@s.whatsapp.net";
         let _healthOk = false;
 
         for (let _attempt = 1; _attempt <= 3; _attempt++) {
@@ -432,26 +463,60 @@ async function startXeonBotInc() {
               },
             });
             _healthOk = true;
-            console.log(chalk.green("✅ Health check passed - bot siap mengirim pesan!"));
+            console.log(
+              chalk.green("✅ Health check passed - bot siap mengirim pesan!"),
+            );
             break;
           } catch (_err) {
-            console.error(chalk.red(`❌ Health check gagal (percobaan ${_attempt}/3): ${_err.message}`));
+            console.error(
+              chalk.red(
+                `❌ Health check gagal (percobaan ${_attempt}/3): ${_err.message}`,
+              ),
+            );
             if (_attempt < 3) await delay(3000);
           }
         }
 
         if (!_healthOk) {
-          console.log(chalk.bgRed.white("\n╔══════════════════════════════════════════════════╗"));
-          console.log(chalk.bgRed.white("║  ⚠️  GHOST SESSION TERDETEKSI SAAT STARTUP!       ║"));
-          console.log(chalk.bgRed.white("╚══════════════════════════════════════════════════╝"));
-          console.log(chalk.yellow("💡 Bot terhubung ke WA tapi tidak bisa mengirim pesan."));
-          console.log(chalk.yellow("💡 Ini terjadi ketika session dipindah antar environment"));
-          console.log(chalk.yellow("   (misal: VPS → Local atau Local → VPS)."));
-          console.log(chalk.cyan("🔧 Solusi: Menghapus folder ./session & restart..."));
-          console.log(chalk.cyan("   Bot akan meminta pairing ulang setelah restart."));
+          console.log(
+            chalk.bgRed.white(
+              "\n╔══════════════════════════════════════════════════╗",
+            ),
+          );
+          console.log(
+            chalk.bgRed.white(
+              "║  ⚠️  GHOST SESSION TERDETEKSI SAAT STARTUP!       ║",
+            ),
+          );
+          console.log(
+            chalk.bgRed.white(
+              "╚══════════════════════════════════════════════════╝",
+            ),
+          );
+          console.log(
+            chalk.yellow(
+              "💡 Bot terhubung ke WA tapi tidak bisa mengirim pesan.",
+            ),
+          );
+          console.log(
+            chalk.yellow(
+              "💡 Ini terjadi ketika session dipindah antar environment",
+            ),
+          );
+          console.log(
+            chalk.yellow("   (misal: VPS → Local atau Local → VPS)."),
+          );
+          console.log(
+            chalk.cyan("🔧 Solusi: Menghapus folder ./session & restart..."),
+          );
+          console.log(
+            chalk.cyan("   Bot akan meminta pairing ulang setelah restart."),
+          );
           try {
             rmSync("./session", { recursive: true, force: true });
-            console.log(chalk.yellow("🗑️  Session dihapus. Restart dalam 5 detik..."));
+            console.log(
+              chalk.yellow("🗑️  Session dihapus. Restart dalam 5 detik..."),
+            );
           } catch (_e) {
             console.error("Gagal hapus session:", _e.message);
           }
@@ -463,40 +528,44 @@ async function startXeonBotInc() {
         console.log(
           chalk.yellow(
             `\n\n                  ${chalk.bold.blue(
-              `[ ${global.botname || "ZIDEEBOT"} ]`
-            )}\n\n`
-          )
+              `[ ${global.botname || "ZIDEEBOT"} ]`,
+            )}\n\n`,
+          ),
         );
         console.log(
-          chalk.cyan(`< ================================================== >`)
+          chalk.cyan(`< ================================================== >`),
         );
         console.log(
           chalk.magenta(
-            `\n${global.themeemoji || "•"} YT CHANNEL: MR UNIQUE HACKER`
-          )
+            `\n${global.themeemoji || "•"} YT CHANNEL: MR UNIQUE HACKER`,
+          ),
         );
         console.log(
-          chalk.magenta(`${global.themeemoji || "•"} GITHUB: mrunqiuehacker`)
+          chalk.magenta(`${global.themeemoji || "•"} GITHUB: mrunqiuehacker`),
         );
         console.log(
-          chalk.magenta(`${global.themeemoji || "•"} WA NUMBER: ${owner}`)
+          chalk.magenta(`${global.themeemoji || "•"} WA NUMBER: ${owner}`),
         );
         console.log(
-          chalk.magenta(`${global.themeemoji || "•"} CREDIT: MR UNIQUE HACKER`)
+          chalk.magenta(`${global.themeemoji || "•"} CREDIT: MR UNIQUE HACKER`),
         );
         console.log(
           chalk.green(
-            `${global.themeemoji || "•"} 🤖 Bot Connected Successfully! ✅`
-          )
+            `${global.themeemoji || "•"} 🤖 Bot Connected Successfully! ✅`,
+          ),
         );
         console.log(chalk.blue(`Bot Version: ${settings.version}`));
-        
+
         // Initialize Ramadhan Scheduler
         try {
           global.ramadhanScheduler = new RamadhanScheduler(XeonBotInc);
           console.log(chalk.green(`🕌 Ramadhan Scheduler initialized!`));
         } catch (error) {
-          console.error(chalk.red(`Error initializing Ramadhan Scheduler: ${error.message}`));
+          console.error(
+            chalk.red(
+              `Error initializing Ramadhan Scheduler: ${error.message}`,
+            ),
+          );
         }
       }
 
@@ -508,15 +577,15 @@ async function startXeonBotInc() {
 
         console.log(
           chalk.red(
-            `Connection closed due to ${lastDisconnect?.error}, reconnecting ${shouldReconnect}`
-          )
+            `Connection closed due to ${lastDisconnect?.error}, reconnecting ${shouldReconnect}`,
+          ),
         );
 
         if (statusCode === DisconnectReason.loggedOut || statusCode === 401) {
           try {
             rmSync("./session", { recursive: true, force: true });
             console.log(
-              chalk.yellow("Session folder deleted. Please re-authenticate.")
+              chalk.yellow("Session folder deleted. Please re-authenticate."),
             );
           } catch (error) {
             console.error("Error deleting session:", error);
