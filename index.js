@@ -344,6 +344,48 @@ async function startXeonBotInc() {
 
     XeonBotInc.serializeM = (m) => smsg(XeonBotInc, m, store);
 
+    // ─────────────────────────────────────────────────────────────
+    // 🛡️  GHOST SESSION GUARD
+    // Mendeteksi session stale saat pindah environment VPS ↔ Local.
+    // Gejala: bot terima pesan di terminal tapi tidak kirim balasan.
+    // Penyebab: Signal Protocol keys tidak sinkron dengan server WA.
+    // Fix: auto-clear ./session dan restart supaya pairing ulang.
+    // ─────────────────────────────────────────────────────────────
+    let _sendFailStreak = 0;
+    const _origSend = XeonBotInc.sendMessage.bind(XeonBotInc);
+
+    XeonBotInc.sendMessage = async (...args) => {
+      try {
+        const result = await _origSend(...args);
+        if (_sendFailStreak > 0) {
+          console.log(chalk.green("✅ sendMessage berhasil - koneksi pulih"));
+          _sendFailStreak = 0;
+        }
+        return result;
+      } catch (err) {
+        _sendFailStreak++;
+        console.error(chalk.red(`❌ sendMessage GAGAL [${_sendFailStreak}/5]: ${err.message}`));
+
+        if (_sendFailStreak >= 5) {
+          _sendFailStreak = 0;
+          console.log(chalk.bgRed.white("\n╔══════════════════════════════════════════════════╗"));
+          console.log(chalk.bgRed.white("║  ⚠️  GHOST SESSION TERDETEKSI!                    ║"));
+          console.log(chalk.bgRed.white("╚══════════════════════════════════════════════════╝"));
+          console.log(chalk.yellow("💡 Bot menerima pesan tapi tidak bisa mengirim."));
+          console.log(chalk.yellow("💡 Penyebab: Session dipakai di environment lain (VPS/Local)."));
+          console.log(chalk.cyan("🔧 Auto-fix: Menghapus session & restart untuk pairing ulang..."));
+          try {
+            rmSync("./session", { recursive: true, force: true });
+            console.log(chalk.yellow("🗑️  Folder session dihapus. Restart dalam 3 detik..."));
+          } catch (e) {
+            console.error("Gagal hapus session:", e.message);
+          }
+          setTimeout(() => process.exit(1), 3000);
+        }
+        throw err;
+      }
+    };
+
     // Connection handling
     XeonBotInc.ev.on("connection.update", async (s) => {
       const { connection, lastDisconnect, qr } = s;
@@ -369,23 +411,52 @@ async function startXeonBotInc() {
           )
         );
 
-        try {
-          const botNumber =
-            XeonBotInc.user.id.split(":")[0] + "@s.whatsapp.net";
-          await XeonBotInc.sendMessage(botNumber, {
-            text: `🤖 Bot Connected Successfully!\n\n⏰ Time: ${new Date().toLocaleString()}\n✅ Status: Online and Ready!\n\n✅Make sure to join below channel`,
-            contextInfo: {
-              forwardingScore: 1,
-              isForwarded: true,
-              forwardedNewsletterMessageInfo: {
-                newsletterJid: "120363287485628066@newsletter",
-                newsletterName: "ZideeBot MD",
-                serverMessageId: -1,
+        // ── Health Check: Pastikan bot BISA kirim pesan setelah connect ──
+        // Ini mendeteksi "ghost session" akibat pindah environment VPS ↔ Local.
+        // Coba kirim ke nomor bot sendiri hingga 3 kali sebelum auto-fix.
+        const _botSelfJid = XeonBotInc.user.id.split(":")[0] + "@s.whatsapp.net";
+        let _healthOk = false;
+
+        for (let _attempt = 1; _attempt <= 3; _attempt++) {
+          try {
+            await _origSend(_botSelfJid, {
+              text: `🤖 Bot Connected Successfully!\n\n⏰ Time: ${new Date().toLocaleString()}\n✅ Status: Online and Ready!\n🌐 Environment: ${process.env.NODE_ENV || "local"}`,
+              contextInfo: {
+                forwardingScore: 1,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                  newsletterJid: "120363287485628066@newsletter",
+                  newsletterName: "ZideeBot MD",
+                  serverMessageId: -1,
+                },
               },
-            },
-          });
-        } catch (error) {
-          console.error("Error sending connection message:", error.message);
+            });
+            _healthOk = true;
+            console.log(chalk.green("✅ Health check passed - bot siap mengirim pesan!"));
+            break;
+          } catch (_err) {
+            console.error(chalk.red(`❌ Health check gagal (percobaan ${_attempt}/3): ${_err.message}`));
+            if (_attempt < 3) await delay(3000);
+          }
+        }
+
+        if (!_healthOk) {
+          console.log(chalk.bgRed.white("\n╔══════════════════════════════════════════════════╗"));
+          console.log(chalk.bgRed.white("║  ⚠️  GHOST SESSION TERDETEKSI SAAT STARTUP!       ║"));
+          console.log(chalk.bgRed.white("╚══════════════════════════════════════════════════╝"));
+          console.log(chalk.yellow("💡 Bot terhubung ke WA tapi tidak bisa mengirim pesan."));
+          console.log(chalk.yellow("💡 Ini terjadi ketika session dipindah antar environment"));
+          console.log(chalk.yellow("   (misal: VPS → Local atau Local → VPS)."));
+          console.log(chalk.cyan("🔧 Solusi: Menghapus folder ./session & restart..."));
+          console.log(chalk.cyan("   Bot akan meminta pairing ulang setelah restart."));
+          try {
+            rmSync("./session", { recursive: true, force: true });
+            console.log(chalk.yellow("🗑️  Session dihapus. Restart dalam 5 detik..."));
+          } catch (_e) {
+            console.error("Gagal hapus session:", _e.message);
+          }
+          setTimeout(() => process.exit(1), 5000);
+          return;
         }
 
         await delay(1999);

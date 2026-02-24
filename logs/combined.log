@@ -21222,3 +21222,123 @@
 2026-02-21 12:26:27 +07:00: }
 2026-02-21 12:28:04 +07:00: 📝 Command used in group: bot
 2026-02-21 12:28:08 +07:00: 📝 Command used in group: bot
+2026-02-24 10:51:55 +07:00: 🔄 Connecting to WhatsApp...
+2026-02-24 10:51:58 +07:00:  
+2026-02-24 10:51:58 +07:00: 🌿Connected to => {
+2026-02-24 10:51:58 +07:00:   "id": "628811613142:13@s.whatsapp.net",
+2026-02-24 10:51:58 +07:00:   "lid": "181192422883427:13@lid"
+2026-02-24 10:51:58 +07:00: }
+2026-02-24 10:51:59 +07:00: Closing session: SessionEntry {
+2026-02-24 10:51:59 +07:00:   _chains: {
+2026-02-24 10:51:59 +07:00:     'BVEKS7tAVbf9B4+vGmchXM+cI9h1zjunIWGzqi+6opYE': { chainKey: [Object], chainType: 1, messageKeys: {} }
+2026-02-24 10:51:59 +07:00:   },
+2026-02-24 10:51:59 +07:00:   registrationId: 1069334773,
+2026-02-24 10:51:59 +07:00:   currentRatchet: {
+2026-02-24 10:51:59 +07:00:     ephemeralKeyPair: {
+2026-02-24 10:51:59 +07:00:       pubKey: <Buffer 05 51 0a 4b bb 40 55 b7 fd 07 8f af 1a 67 21 5c cf 9c 23 d8 75 ce 3b a7 21 61 b3 aa 2f ba a2 96 04>,
+2026-02-24 10:51:59 +07:00:       privKey: <Buffer 10 ac 9d 45 70 10 95 29 ab 12 bc 4b 76 f9 64 4e d7 14 36 31 50 48 ad 87 f4 0d 13 3c c6 e0 e3 63>
+2026-02-24 10:51:59 +07:00:     },
+2026-02-24 10:51:59 +07:00:     lastRemoteEphemeralKey: <Buffer 05 44 4a a7 71 cb 54 90 ef 2a f0 42 10 df f1 91 ec 00 bc 1a 72 f5 8e 45 0a f2 8e 85 19 c7 ab 41 4c>,
+2026-02-24 10:51:59 +07:00:     previousCounter: 0,
+2026-02-24 10:51:59 +07:00:     rootKey: <Buffer ea d2 c4 b8 7e cb 8c 00 80 5a 16 49 96 d4 f3 98 81 da 28 33 b0 1f 1b 37 39 94 f2 d8 33 31 62 dd>
+2026-02-24 10:51:59 +07:00:   },
+2026-02-24 10:51:59 +07:00:   indexInfo: {
+2026-02-24 10:51:59 +07:00:     baseKey: <Buffer 05 39 b8 33 ef 51 c4 be d9 5b d0 e1 11 d6 5c 17 06 fb 6f d1 0b 85 ec 58 2c 62 12 08 98 3c db d7 13>,
+2026-02-24 10:51:59 +07:00:     baseKeyType: 1,
+2026-02-24 10:51:59 +07:00:     closed: -1,
+2026-02-24 10:51:59 +07:00:     used: 1771905034512,
+2026-02-24 10:51:59 +07:00:     created: 1771905034512,
+2026-02-24 10:51:59 +07:00:     remoteIdentityKey: <Buffer 05 8d a3 ce 16 f1 7c eb e6 f9 d2 e6 ce e1 50 02 39 aa 64 44 6d 6a f9 41 c2 66 10 20 b5 07 1a 7d 78>
+2026-02-24 10:51:59 +07:00:   },
+2026-02-24 10:51:59 +07:00:   pendingPreKey: {
+2026-02-24 10:51:59 +07:00:     signedKeyId: 12103318,
+2026-02-24 10:51:59 +07:00:     baseKey: <Buffer 05 39 b8 33 ef 51 c4 be d9 5b d0 e1 11 d6 5c 17 06 fb 6f d1 0b 85 ec 58 2c 62 12 08 98 3c db d7 13>,
+2026-02-24 10:51:59 +07:00:     preKeyId: 16405250
+2026-02-24 10:51:59 +07:00:   }
+2026-02-24 10:51:59 +07:00: }
+2026-02-24 10:51:59 +07:00: ✅ Health check passed - bot siap mengirim pesan!
+2026-02-24 10:52:01 +07:00: 
+2026-02-24 10:52:01 +07:00: 
+2026-02-24 10:52:01 +07:00:                   [ ZideeBot ]
+2026-02-24 10:52:01 +07:00: 
+2026-02-24 10:52:01 +07:00: 
+2026-02-24 10:52:01 +07:00: < ================================================== >
+2026-02-24 10:52:01 +07:00: 
+2026-02-24 10:52:01 +07:00: • YT CHANNEL: MR UNIQUE HACKER
+2026-02-24 10:52:01 +07:00: • GITHUB: mrunqiuehacker
+2026-02-24 10:52:01 +07:00: • WA NUMBER: 628811613142,6282311727134
+2026-02-24 10:52:01 +07:00: • CREDIT: MR UNIQUE HACKER
+2026-02-24 10:52:01 +07:00: • 🤖 Bot Connected Successfully! ✅
+2026-02-24 10:52:01 +07:00: Bot Version: 3.0.5
+2026-02-24 10:52:01 +07:00: 🕌 Initializing Ramadhan Schedulers...
+2026-02-24 10:52:01 +07:00: 🕌 Sahur scheduler initialized (03:30 WIB)
+2026-02-24 10:52:01 +07:00: 🕌 Daily Maghrib fetch scheduler initialized (00:01 WIB)
+2026-02-24 10:52:01 +07:00: 🕌 Group close schedule set at 22:00 WIB (Cron: 0 22 * * *) for: 120363418714273061@g.us
+2026-02-24 10:52:01 +07:00: 🕌 Group open schedule set at 09:00 WIB (Cron: 0 9 * * *) for: 120363398539552239@g.us
+2026-02-24 10:52:01 +07:00: 🕌 Group close schedule set at 22:00 WIB (Cron: 0 22 * * *) for: 120363398539552239@g.us
+2026-02-24 10:52:01 +07:00: 🕌 Group open/close schedules restored: 3 job(s)
+2026-02-24 10:52:01 +07:00: 🕌 All Ramadhan schedulers are active! ✅
+2026-02-24 10:52:01 +07:00: 🕌 Ramadhan Scheduler initialized!
+2026-02-24 10:52:02 +07:00: 🕌 Maghrib time fetched: 18:13 WIB
+2026-02-24 10:52:02 +07:00: 🕌 Maghrib reminder scheduled at 18:13 WIB (Cron: 13 18 * * *)
+2026-02-24 11:03:45 +07:00: 🔄 Connecting to WhatsApp...
+2026-02-24 11:03:47 +07:00:  
+2026-02-24 11:03:47 +07:00: 🌿Connected to => {
+2026-02-24 11:03:47 +07:00:   "id": "628811613142:13@s.whatsapp.net",
+2026-02-24 11:03:47 +07:00:   "lid": "181192422883427:13@lid"
+2026-02-24 11:03:47 +07:00: }
+2026-02-24 11:03:48 +07:00: Closing session: SessionEntry {
+2026-02-24 11:03:48 +07:00:   _chains: {
+2026-02-24 11:03:48 +07:00:     'BbCaLgHs5qSeJ5mZqzl+hzAvLAcut3a2mPwqbknNR+se': { chainKey: [Object], chainType: 1, messageKeys: {} }
+2026-02-24 11:03:48 +07:00:   },
+2026-02-24 11:03:48 +07:00:   registrationId: 1069334773,
+2026-02-24 11:03:48 +07:00:   currentRatchet: {
+2026-02-24 11:03:48 +07:00:     ephemeralKeyPair: {
+2026-02-24 11:03:48 +07:00:       pubKey: <Buffer 05 b0 9a 2e 01 ec e6 a4 9e 27 99 99 ab 39 7e 87 30 2f 2c 07 2e b7 76 b6 98 fc 2a 6e 49 cd 47 eb 1e>,
+2026-02-24 11:03:48 +07:00:       privKey: <Buffer 98 39 56 47 7b 9b 52 99 25 a8 15 0d fc 2d f1 00 cc d9 24 62 3d 27 32 71 d9 88 f9 77 48 c6 72 5f>
+2026-02-24 11:03:48 +07:00:     },
+2026-02-24 11:03:48 +07:00:     lastRemoteEphemeralKey: <Buffer 05 44 4a a7 71 cb 54 90 ef 2a f0 42 10 df f1 91 ec 00 bc 1a 72 f5 8e 45 0a f2 8e 85 19 c7 ab 41 4c>,
+2026-02-24 11:03:48 +07:00:     previousCounter: 0,
+2026-02-24 11:03:48 +07:00:     rootKey: <Buffer 17 e3 31 6c bb 36 9b 95 d1 84 97 61 16 9d 0f 80 d4 54 94 10 02 6a 4c cb 10 7e e0 05 c0 99 f2 de>
+2026-02-24 11:03:48 +07:00:   },
+2026-02-24 11:03:48 +07:00:   indexInfo: {
+2026-02-24 11:03:48 +07:00:     baseKey: <Buffer 05 78 35 c3 97 00 07 8e 0e 15 94 2c 44 65 1d 2e da 13 a4 1f 9a dd 76 b1 93 85 9c c1 15 46 2d f3 37>,
+2026-02-24 11:03:48 +07:00:     baseKeyType: 1,
+2026-02-24 11:03:48 +07:00:     closed: -1,
+2026-02-24 11:03:48 +07:00:     used: 1771905326830,
+2026-02-24 11:03:48 +07:00:     created: 1771905326830,
+2026-02-24 11:03:48 +07:00:     remoteIdentityKey: <Buffer 05 8d a3 ce 16 f1 7c eb e6 f9 d2 e6 ce e1 50 02 39 aa 64 44 6d 6a f9 41 c2 66 10 20 b5 07 1a 7d 78>
+2026-02-24 11:03:48 +07:00:   },
+2026-02-24 11:03:48 +07:00:   pendingPreKey: {
+2026-02-24 11:03:48 +07:00:     signedKeyId: 12103318,
+2026-02-24 11:03:48 +07:00:     baseKey: <Buffer 05 78 35 c3 97 00 07 8e 0e 15 94 2c 44 65 1d 2e da 13 a4 1f 9a dd 76 b1 93 85 9c c1 15 46 2d f3 37>,
+2026-02-24 11:03:48 +07:00:     preKeyId: 16405297
+2026-02-24 11:03:48 +07:00:   }
+2026-02-24 11:03:48 +07:00: }
+2026-02-24 11:03:48 +07:00: ✅ Health check passed - bot siap mengirim pesan!
+2026-02-24 11:03:50 +07:00: 
+2026-02-24 11:03:50 +07:00: 
+2026-02-24 11:03:50 +07:00:                   [ ZideeBot ]
+2026-02-24 11:03:50 +07:00: 
+2026-02-24 11:03:50 +07:00: 
+2026-02-24 11:03:50 +07:00: < ================================================== >
+2026-02-24 11:03:50 +07:00: 
+2026-02-24 11:03:50 +07:00: • YT CHANNEL: MR UNIQUE HACKER
+2026-02-24 11:03:50 +07:00: • GITHUB: mrunqiuehacker
+2026-02-24 11:03:50 +07:00: • WA NUMBER: 628811613142,6282311727134
+2026-02-24 11:03:50 +07:00: • CREDIT: MR UNIQUE HACKER
+2026-02-24 11:03:50 +07:00: • 🤖 Bot Connected Successfully! ✅
+2026-02-24 11:03:50 +07:00: Bot Version: 3.0.5
+2026-02-24 11:03:50 +07:00: 🕌 Initializing Ramadhan Schedulers...
+2026-02-24 11:03:50 +07:00: 🕌 Sahur scheduler initialized (03:30 WIB)
+2026-02-24 11:03:50 +07:00: 🕌 Daily Maghrib fetch scheduler initialized (00:01 WIB)
+2026-02-24 11:03:50 +07:00: 🕌 Group close schedule set at 22:00 WIB (Cron: 0 22 * * *) for: 120363418714273061@g.us
+2026-02-24 11:03:50 +07:00: 🕌 Group open schedule set at 09:00 WIB (Cron: 0 9 * * *) for: 120363398539552239@g.us
+2026-02-24 11:03:50 +07:00: 🕌 Group close schedule set at 22:00 WIB (Cron: 0 22 * * *) for: 120363398539552239@g.us
+2026-02-24 11:03:50 +07:00: 🕌 Group open/close schedules restored: 3 job(s)
+2026-02-24 11:03:50 +07:00: 🕌 All Ramadhan schedulers are active! ✅
+2026-02-24 11:03:50 +07:00: 🕌 Ramadhan Scheduler initialized!
+2026-02-24 11:03:51 +07:00: 📝 Command used in group: ping
+2026-02-24 11:03:51 +07:00: 🕌 Maghrib time fetched: 18:13 WIB
+2026-02-24 11:03:51 +07:00: 🕌 Maghrib reminder scheduled at 18:13 WIB (Cron: 13 18 * * *)
+2026-02-24 11:04:02 +07:00: 📝 Command used in group: .ramadhan status
