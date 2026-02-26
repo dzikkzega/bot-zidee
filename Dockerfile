@@ -24,7 +24,7 @@ COPY package*.json ./
 
 # Install Node.js dependencies
 # Using --legacy-peer-deps karena beberapa dependencies mungkin conflict
-RUN npm install --legacy-peer-deps --production
+RUN npm install --legacy-peer-deps --omit=dev
 
 # Copy all application files
 COPY . .
@@ -57,5 +57,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 VOLUME ["/app/session", "/app/temp", "/app/tmp", "/app/logs", "/app/products", "/app/data"]
 
 # Command untuk menjalankan bot
-CMD ["node", "index.js"]
 CMD ["node", "index.js"]
